@@ -14,7 +14,7 @@ var DB_PORT = 27017;
 mongoose.connect('mongodb://localhost:' + DB_PORT);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
+db.once('open', function(callback) {
     console.log.bind(console, 'connection success');
 });
 
@@ -75,9 +75,37 @@ var MIME_TYPES = {
 }
 
 //starts the server listening on port 3000
-var server = app.listen(3000, function () {
+var server = app.listen(3000, function() {
     var host = server.address().address;
     var port = server.address().port;
 });
 
 console.log('Server running at http://127.0.0.1:' + PORT + '/');
+
+app.get('/users', function(req, res) {
+    User.find({}, function(err, users) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(users);
+    });
+});
+
+app.get('/cottages', function(req, res) {
+    Cottage.find({}, function(err, users) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(users);
+    });
+});
