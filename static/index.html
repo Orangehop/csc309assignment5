@@ -15,7 +15,8 @@
 
 </head>
 
-    <!-- Used starter code from Bootstrap Examples -->
+<!-- Used starter code from Bootstrap Examples -->
+
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -24,57 +25,66 @@
             </div>
         </div>
     </nav>
-    
-    <div class="inner cover" id="cover">
-            <h1 class="cover-heading">CottShare</h1>
-            <p class="lead">A place where you can lease your cottages.</p>
-            <p class="lead">
-              <a href="javascript:loginButton()" class="btn btn-lg btn-default">Login</a>
-                <a href="javascript:signUpButton()" class="btn btn-lg btn-default">Sign Up</a>
-            </p>
-    </div>
 
-    <div hidden class="container" id="login">
+    <div class="site-wrapper">
 
-        <form class="form-signin" id="sign-in-form">
-            <h2 class="form-signin-heading">Log In</h2>
-            <h4><span class="label label-danger" id="errorMessageLogin"></span></h4>
-            <label for="inputEmail" class="sr-only">Email Address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-            <div id="buttons">
-                <button class="btn btn-lg btn-default btn-block" type="button" onclick="login()">Log In</button>
-                <h4 class='form-signin-heading'>Don't have an account?</h4>
-                <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUpButton()">Sign Up</button>
+        <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+                <div class="inner cover" id="cover">
+                    <h1 class="cover-heading">CottShare</h1>
+                    <p class="lead">A place where you can lease your cottages.</p>
+                    <p class="lead">
+                        <a href="javascript:loginButton()" class="btn btn-lg btn-default">Login</a>
+                        <a href="javascript:signUpButton()" class="btn btn-lg btn-default">Sign Up</a>
+                    </p>
+                </div>
             </div>
-        </form>
 
-    </div>
-    
-    <div hidden class="container" id="signup">
+            <div hidden class="container" id="login">
 
-        <form class="form-signin" id="sign-in-form">
-            <h2 class="form-signin-heading">Sign Up</h2>
-            <h4><span class="label label-danger" id="errorMessageSignUp"></span></h4>
-            <label for="inputEmail" class="sr-only">Email Address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-            <label for="inputVerifyPassword" class="sr-only">Verify Password</label>
-            <input type="password" id="inputVerifyPassword" class="form-control" placeholder="Verify Password" required>
-            <label for="inputFirstName" class="sr-only">First Name</label>
-            <input type="text" id="inputEmail" class="form-control" placeholder="First Name" required>
-            <label for="inputLastName" class="sr-only">Last Name</label>
-            <input type="text" id="inputPassword" class="form-control" placeholder="Last Name" required>
-            <div id="buttons">
-                <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUp()">Sign Up</button>
-                <h4 class='form-signin-heading'>Don't have an account?</h4>
-                <button class="btn btn-lg btn-default btn-block" type="button" onclick="loginButton()">Login</button>
+                <form class="form-signin" id="sign-in-form">
+                    <h2 class="form-signin-heading">Log In</h2>
+                    <h4><span class="label label-danger" id="errorMessageLogin"></span></h4>
+                    <label for="inputEmail" class="sr-only">Email Address</label>
+                    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                    <div id="buttons">
+                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="login()">Log In</button>
+                        <h4 class='form-signin-heading'>Don't have an account?</h4>
+                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUpButton()">Sign Up</button>
+                    </div>
+                </form>
+
             </div>
-        </form>
 
+            <div hidden class="container" id="signup">
+
+                <form class="form-signin" id="sign-in-form">
+                    <h2 class="form-signin-heading">Sign Up</h2>
+                    <h4><span class="label label-danger" id="errorMessageSignUp"></span></h4>
+                    <label for="inputEmail" class="sr-only">Email Address</label>
+                    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                    <label for="inputVerifyPassword" class="sr-only">Verify Password</label>
+                    <input type="password" id="inputVerifyPassword" class="form-control" placeholder="Verify Password" required>
+                    <label for="inputFirstName" class="sr-only">First Name</label>
+                    <input type="text" id="inputEmail" class="form-control" placeholder="First Name" required>
+                    <label for="inputLastName" class="sr-only">Last Name</label>
+                    <input type="text" id="inputPassword" class="form-control" placeholder="Last Name" required>
+                    <div id="buttons">
+                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUp()">Sign Up</button>
+                        <h4 class='form-signin-heading'>Don't have an account?</h4>
+                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="loginButton()">Login</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
+
     <!-- /container -->
 
 </body>
