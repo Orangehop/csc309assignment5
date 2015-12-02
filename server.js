@@ -20,13 +20,35 @@ db.once('open', function (callback) {
 
 //Create db schema for users
 var userSchema = mongoose.Schema({
-    displayName: String,
+    firstName: String,
+    lastName: String,
     password: String,
     email: String,
     description: String,
     location: String
 });
+
+//Create db schema for cottages
+var cottageSchema = mongoose.Schema({
+    name: String,
+    location: String,
+    rating: Number,
+    datesAvailable: String,
+    owner: ObjectId,
+    rentAmount: Number
+});
+
+//Create db schema for comments
+var commentSchema = mongoose.Schema({
+    cottage: ObjectId,
+    commentor: ObjectId,
+    comment: String
+});
+
+
 var User = mongoose.model('User', userSchema);
+var Cottage = mongoose.model('Cottage', userSchema);
+var Comment = mongoose.model('Comment', commentSchema)
 
 //Serve static files
 app.use('/', express.static(__dirname + '/static'));
