@@ -1,0 +1,14 @@
+{
+    "name": "project",
+    "description": "CSC309 Assignment 5",
+    "version": "0.0.1",
+    "dependencies": {
+        "express": "4.x",
+        "sessions": "",
+        "body-parser": "https://github.com/expressjs/body-parser",
+        "bootstrap": "3.3.x",
+        "mongoose" : "*",
+        "jquery" : "*",
+        "express-session" : "*"
+    }
+}
