@@ -137,3 +137,26 @@ app.get('/cottageByRating', function(req, res) {
         res.send(cottages);
     });
 });
+
+app.get('/login', function(req, res) {
+    Cottage.findOne({'email' : req.body.email}, function(err, user) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        if(!user){
+            res.status(400);
+            res.send({
+                    "ErrorCode": "USER_NOT_FOUND"
+                });
+        }
+        if(req.body.password === user.password){
+            //Session stuff here?
+            res.send(user);
+        }
+    });
+});
