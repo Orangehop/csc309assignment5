@@ -106,12 +106,26 @@ app.get('/cottages', function(req, res) {
             console.error(err);
             return res.end();
         }
-        res.send(users);
+        res.send(cottages);
     });
 });
 
 app.get('/cottageByLocation', function(req, res) {
     Cottage.find({'location' : req.body.location}, function(err, cottages) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(cottages);
+    });
+});
+
+app.get('/cottageByRating', function(req, res) {
+    Cottage.find({'rating' : {$gte: req.body.rating}}, function(err, cottages) {
         if (err) {
             res.status(500);
             res.send({
