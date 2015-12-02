@@ -26,11 +26,11 @@
         </div>
     </nav>
 
-    <div class="site-wrapper" id="landingPage">
+    <div class="site-wrapper">
 
         <div class="site-wrapper-inner">
 
-            <div class="cover-container">
+            <div hidden class="cover-container" id="landingPage">
                 <div class="inner cover" id="cover">
                     <h1 class="cover-heading">CottShare</h1>
                     <p class="lead">A place where you can lease your cottages.</p>
@@ -76,21 +76,101 @@
                     <input type="text" id="inputPassword" class="form-control" placeholder="Last Name" required>
                     <div id="buttons">
                         <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUp()">Sign Up</button>
-                        <h4 class='form-signin-heading'>Don't have an account?</h4>
+                        <h4 class='form-signin-heading'>Already have an account?</h4>
                         <button class="btn btn-lg btn-default btn-block" type="button" onclick="loginButton()">Login</button>
                     </div>
                 </form>
 
             </div>
 
+            <div hidden class="container" id="navigation">
+
+                <!-- After Login/Signup -->
+                <h1 class="cover-heading">What would you like to do?</h1>
+                <p class="lead">
+                    <a href="javascript:createListingButton()" class="btn btn-lg btn-default">Create a Listing</a>
+                    <a href="javascript:searchForListingButton()" class="btn btn-lg btn-default">Search for a Listing</a>
+                </p>
+
+            </div>
+
+            <div hidden class="container" id="search">
+
+                <h1 class="cover-heading">Where would you like to go?</h1>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <input type="location" class="form-control input-lg" id="inputSearchLocation" placeholder="Location">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-lg btn-default" onclick="searchButton()">Search</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="container" id="createListing">
+
+        <div class="container" id="listingForm">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Listing Pictures</h3>
+                        </div>
+                        <div class="panel-body" id="picture">
+                            <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="cottage.png" data-holder-rendered="true">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Location</h3>
+                        </div>
+                        <div class="panel-body" id="email">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Price</h3>
+                        </div>
+                        <div class="panel-body" id="displayName">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Dates Available</h3>
+                        </div>
+                        <div class="panel-body" id="location">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Description</h3>
+                        </div>
+                        <div class="panel-body" id="desc">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4><span class="label label-danger" id="errorMessage"></span></h4>
+
+        </div>
+
+    </div>
+
         </div>
     </div>
 
-    <div hidden class="container" id="navigation">
-
-    <!-- After Login/Signup -->
-        
-    </div>
 
     <!-- /container -->
 

@@ -44,7 +44,6 @@ body {
     color: #fff;
     text-align: center;
     text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
-    padding: 40px;
 }
 
 
@@ -58,6 +57,9 @@ body {
     min-height: 100%;
     -webkit-box-shadow: inset 0 0 100px rgba(0, 0, 0, .5);
     box-shadow: inset 0 0 100px rgba(0, 0, 0, .5);
+    padding-top: 60px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 .site-wrapper-inner {

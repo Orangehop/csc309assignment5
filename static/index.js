@@ -12,6 +12,19 @@ var loginButton = function () {
     $('#errorMessageLogin').text("");
 }
 
+var createListingButton = function () {
+    $("#login").hide();
+}
+
+var searchForListingButton = function () {
+    $("#login").hide();
+    $("#search").show();
+}
+
+var searchButton = function () {
+    
+}
+
 var login = function () { //logs into application
     $('#errorMessageLogin').text("");
     if (!$('#inputEmail').val()) {
@@ -27,7 +40,7 @@ var login = function () { //logs into application
         password: $('#inputPassword').val()
     };
     $.post('/login', formData).success(function (data, status, xhr) { //sends post request to login
-        getDashboardPage();
+        $('#landingPage').hide();
     }).fail(function (data, status, xhr) {
         $('#errorMessageLogin').text("Authentication Failed!"); // error message if unable to login
     });
@@ -66,8 +79,7 @@ var signUp = function () {
         lastName: $('#inputLastName').val()
     };
     $.post('/signUp', formData).success(function (data, status, xhr) { //sends post request to sing up
-        currentUser = formData.email;
-        getDashboardPage();
+        $('#landingPage').hide();
     }).fail(function (data, status, xhr) {
         $('#errorMessage').text("Error creating user!"); //error message if user cannot be created
     });
