@@ -97,7 +97,7 @@ app.get('/users', function(req, res) {
 });
 
 app.get('/cottages', function(req, res) {
-    Cottage.find({}, function(err, users) {
+    Cottage.find({}, function(err, cottages) {
         if (err) {
             res.status(500);
             res.send({
@@ -107,5 +107,19 @@ app.get('/cottages', function(req, res) {
             return res.end();
         }
         res.send(users);
+    });
+});
+
+app.get('/cottageByLocation', function(req, res) {
+    Cottage.find({'location' : req.body.location}, function(err, cottages) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(cottages);
     });
 });
