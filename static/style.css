@@ -36,6 +36,8 @@ html,
 body {
     height: 100%;
     background-color: #333;
+    background-image: url("cottage.png");
+    background-size: cover;
 }
 
 body {
