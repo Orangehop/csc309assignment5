@@ -104,6 +104,7 @@ var login = function () { //logs into application
     $.post('/login', formData).success(function (data, status, xhr) { //sends post request to login
         $('#landingPage').hide();
         $('#navigation').show();
+        $('navbarProfile').show();
     }).fail(function (data, status, xhr) {
         $('#errorMessageLogin').text("Authentication Failed!"); // error message if unable to login
     });
@@ -144,6 +145,7 @@ var signUp = function () {
     $.post('/signUp', formData).success(function (data, status, xhr) { //sends post request to sing up
         $('#landingPage').hide();
         $("#navigation").show();
+        $('navbarProfile').show();
     }).fail(function (data, status, xhr) {
         $('#errorMessage').text("Error creating user!"); //error message if user cannot be created
     });

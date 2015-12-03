@@ -22,7 +22,21 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <a class="navbar-brand" href="/">CottShare</a>
+            </div>
+            <div hidden class="container" id="navbarProfile">
+                <div hidden class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="javascript:getCurrentUserProfilePage()" id="navUser">Profile</a></li>
+                        <li><a href="javascript:getDashboardPage()">My Listings</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -131,7 +145,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Listing Pictures</h3>
                             </div>
-                            <div class="panel-body" id="picture">
+                            <div class="panel-body" id="listingPicture">
                                 <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="cottage.png" data-holder-rendered="true">
                             </div>
                         </div>
@@ -141,7 +155,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Location</h3>
                             </div>
-                            <div class="panel-body" id="email">
+                            <div class="panel-body" id="listingLocation">
                             </div>
                         </div>
                     </div>
@@ -150,7 +164,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Price</h3>
                             </div>
-                            <div class="panel-body" id="displayName">
+                            <div class="panel-body" id="listingPrice">
                             </div>
                         </div>
                     </div>
@@ -160,7 +174,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Rating</h3>
                             </div>
-                            <div class="panel-body" id="displayName">
+                            <div class="panel-body" id="listingRating">
                             </div>
                         </div>
                     </div>
@@ -172,7 +186,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Dates Available</h3>
                             </div>
-                            <div class="panel-body" id="location">
+                            <div class="panel-body" id="listingDates">
                             </div>
                         </div>
                     </div>
@@ -181,7 +195,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Description</h3>
                             </div>
-                            <div class="panel-body" id="desc">
+                            <div class="panel-body" id="listingDescription">
                             </div>
                         </div>
                     </div>
@@ -193,7 +207,7 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Comments</h3>
                             </div>
-                            <div class="panel-body" id="location">
+                            <div class="panel-body" id="listingComments">
                             </div>
                         </div>
                     </div>
@@ -212,7 +226,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Profile Picture</h3>
                                 </div>
-                                <div class="panel-body" id="picture">
+                                <div class="panel-body" id="userPicture">
                                     <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="cottage.png" data-holder-rendered="true">
                                 </div>
                             </div>
@@ -222,7 +236,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Name</h3>
                                 </div>
-                                <div class="panel-body" id="email">
+                                <div class="panel-body" id="userName">
                                 </div>
                             </div>
                         </div>
@@ -231,7 +245,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Location</h3>
                                 </div>
-                                <div class="panel-body" id="displayName">
+                                <div class="panel-body" id="userLocation">
                                 </div>
                             </div>
                         </div>
@@ -243,7 +257,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Contact Info</h3>
                                 </div>
-                                <div class="panel-body" id="location">
+                                <div class="panel-body" id="userContactInfo">
                                 </div>
                             </div>
                         </div>
@@ -252,7 +266,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Description</h3>
                                 </div>
-                                <div class="panel-body" id="desc">
+                                <div class="panel-body" id="userDescription">
                                 </div>
                             </div>
                         </div>
@@ -264,7 +278,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Comments</h3>
                                 </div>
-                                <div class="panel-body" id="location">
+                                <div class="panel-body" id="userComments">
                                 </div>
                             </div>
                         </div>
