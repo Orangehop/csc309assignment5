@@ -8,6 +8,7 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDD3_MN6zrbgEquLrbU_qigfKX4FVqhF5k&libraries=places"></script>
 
     <!-- Custom styles for this template -->
     <link href="style.css" rel="stylesheet">
@@ -30,7 +31,7 @@
 
         <div class="site-wrapper-inner">
 
-            <div class="cover-container" id="landingPage">
+            <div hidden class="cover-container" id="landingPage">
                 <div class="inner cover" id="cover">
                     <h1 class="cover-heading">CottShare</h1>
                     <p class="lead">A place where you can lease your cottages.</p>
@@ -71,9 +72,9 @@
                     <label for="inputVerifyPassword" class="sr-only">Verify Password</label>
                     <input type="password" id="inputVerifyPassword" class="form-control" placeholder="Verify Password" required>
                     <label for="inputFirstName" class="sr-only">First Name</label>
-                    <input type="text" id="inputEmail" class="form-control" placeholder="First Name" required>
+                    <input type="text" id="inputFirstName" class="form-control" placeholder="First Name" required>
                     <label for="inputLastName" class="sr-only">Last Name</label>
-                    <input type="text" id="inputPassword" class="form-control" placeholder="Last Name" required>
+                    <input type="text" id="inputLastName" class="form-control" placeholder="Last Name" required>
                     <div id="buttons">
                         <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUp()">Sign Up</button>
                         <h4 class='form-signin-heading'>Already have an account?</h4>
@@ -95,78 +96,186 @@
             </div>
 
             <div hidden class="container" id="search">
-
+                <h4><span class="label label-danger" id="errorMessageSearch"></span></h4>
                 <h1 class="cover-heading">Where would you like to go?</h1>
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <input type="location" class="form-control input-lg" id="inputSearchLocation" placeholder="Location">
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-lg btn-default" onclick="searchButton()">Search</button>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="container" id="createListing">
 
-        <div hidden class="container" id="listingForm">
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Listing Pictures</h3>
-                        </div>
-                        <div class="panel-body" id="picture">
-                            <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="cottage.png" data-holder-rendered="true">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Location</h3>
-                        </div>
-                        <div class="panel-body" id="email">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Price</h3>
-                        </div>
-                        <div class="panel-body" id="displayName">
-                        </div>
-                    </div>
+                <div class="input-group">
+                    <span class="input-group-btn">
+        <button class="btn btn-default btn-lg" type="button" onclick="searchButton()">Search!</button>
+      </span>
+                    <input type="text" class="form-control input-lg" id="cottageSearch" placeholder="Search for Cottages near...">
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Dates Available</h3>
-                        </div>
-                        <div class="panel-body" id="location">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Description</h3>
-                        </div>
-                        <div class="panel-body" id="desc">
-                        </div>
-                    </div>
-                </div>
+            <div hidden class="container" id="createListingPage">
+
+                <h2 class="form-signin-heading">Create A Listing</h2>
+                <h4><span class="label label-danger" id="errorMessageCreateListing"></span></h4>
+                <label for="inputCottageName" class="label">Cottage Name</label>
+                <input type="text" id="inputCottageName" class="form-control" placeholder="Cottage Name" required autofocus>
+                <label for="inputLocation" class="label">Location</label>
+                <input type="text" id="inputLocation" class="form-control" placeholder="City Your Cottage is Near..." required>
+                <label for="inputPrice" class="label">Price</label>
+                <input type="text" id="inputPrice" class="form-control" placeholder="Pricing Scheme" required>
+                <label for="inputDatesAvailable" class="label">Dates Available</label>
+                <input type="text" id="inputDatesAvailable" class="form-control" placeholder="Dates Available" required>
+                <label for="inputDescription" class="label">Description</label>
+                <input type="text" id="inputDescription" class="form-control" placeholder="A Short Description..." required>
+                <button class="btn btn-lg btn-default btn-block" type="button" onclick="createButton()">Create Listing</button>
             </div>
 
-            <h4><span class="label label-danger" id="errorMessage"></span></h4>
+            <div hidden class="container" id="listingPage">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Listing Pictures</h3>
+                            </div>
+                            <div class="panel-body" id="picture">
+                                <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="cottage.png" data-holder-rendered="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Location</h3>
+                            </div>
+                            <div class="panel-body" id="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Price</h3>
+                            </div>
+                            <div class="panel-body" id="displayName">
+                            </div>
+                        </div>
+                    </div>
 
-        </div>
+                    <div class="col-sm-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Rating</h3>
+                            </div>
+                            <div class="panel-body" id="displayName">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Dates Available</h3>
+                            </div>
+                            <div class="panel-body" id="location">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Description</h3>
+                            </div>
+                            <div class="panel-body" id="desc">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Comments</h3>
+                            </div>
+                            <div class="panel-body" id="location">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4><span class="label label-danger" id="errorMessage"></span></h4>
+
+            </div>
+
+            <div hide class="container" id="userProfilePage">
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Profile Picture</h3>
+                                </div>
+                                <div class="panel-body" id="picture">
+                                    <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="cottage.png" data-holder-rendered="true">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Name</h3>
+                                </div>
+                                <div class="panel-body" id="email">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Location</h3>
+                                </div>
+                                <div class="panel-body" id="displayName">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Contact Info</h3>
+                                </div>
+                                <div class="panel-body" id="location">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Description</h3>
+                                </div>
+                                <div class="panel-body" id="desc">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Comments</h3>
+                                </div>
+                                <div class="panel-body" id="location">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4><span class="label label-danger" id="errorMessage"></span></h4>
+
+                </div>
+
+            </div>
+
 
         </div>
     </div>

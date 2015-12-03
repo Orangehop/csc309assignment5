@@ -1,3 +1,5 @@
+var autocomplete;
+
 var signUpButton = function () {
     $("#login").hide();
     $("#cover").hide();
@@ -13,16 +15,76 @@ var loginButton = function () {
 }
 
 var createListingButton = function () {
-    $("#login").hide();
+    $("#navigation").hide();
+    $("#createListingPage").show();
+    var autoCompleteInput = document.getElementById('inputLocation');
+    var autoCompleteOptions = {
+        types: ['(cities)'],
+        componentRestrictions: {
+            country: 'ca'
+        }
+    };
+    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions);
 }
 
 var searchForListingButton = function () {
-    $("#login").hide();
+    $("#navigation").hide();
     $("#search").show();
+    var autoCompleteInput = document.getElementById('cottageSearch');
+    var autoCompleteOptions = {
+        types: ['(cities)'],
+        componentRestrictions: {
+            country: 'ca'
+        }
+    };
+    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions);
 }
 
 var searchButton = function () {
-    
+    if (autocomplete) {
+        if (autocomplete.getPlace()) {
+            var place = autocomplete.getPlace();
+            console.log(place.geometry.location.lat());
+            console.log(place.geometry.location.lng());
+            $("#errorMessageSearch").text("");
+        } else {
+            $("#errorMessageSearch").text("Please select a valid location!");
+        }
+    }
+}
+
+var createButton = function () {
+    $('#errorMessageCreateListing').text("");
+    if (!$('#inputCottageName').val()) {
+        $('#errorMessageCreateListing').text("Required fields missing!"); //give error message if fields are missing
+        return;
+    };
+    if (!$('#inputLocation').val()) {
+        $('#errorMessageCreateListing').text("Required fields missing!"); //give error message if fields are missing
+        return;
+    };
+    if (!$('#inputPrice').val()) {
+        $('#errorMessageCreateListing').text("Required fields missing!"); //give error message if fields are missing
+        return;
+    };
+    if (!$('#inputDatesAvailable').val()) {
+        $('#errorMessageCreateListing').text("Required fields missing!"); //give error message if fields are missing
+        return;
+    };
+    if (!$('#inputDescription').val()) {
+        $('#errorMessageCreateListing').text("Required fields missing!"); //give error message if fields are missing
+        return;
+    };
+    if (autocomplete) {
+        if (autocomplete.getPlace()) {
+            var place = autocomplete.getPlace();
+            console.log(place.geometry.location.lat());
+            console.log(place.geometry.location.lng());
+            $("#errorMessageCreateListing").text("");
+        } else {
+            $("#errorMessageCreateListing").text("Please select a valid location!");
+        }
+    }
 }
 
 var login = function () { //logs into application
@@ -41,6 +103,7 @@ var login = function () { //logs into application
     };
     $.post('/login', formData).success(function (data, status, xhr) { //sends post request to login
         $('#landingPage').hide();
+        $('#navigation').show();
     }).fail(function (data, status, xhr) {
         $('#errorMessageLogin').text("Authentication Failed!"); // error message if unable to login
     });
@@ -80,6 +143,7 @@ var signUp = function () {
     };
     $.post('/signUp', formData).success(function (data, status, xhr) { //sends post request to sing up
         $('#landingPage').hide();
+        $("#navigation").show();
     }).fail(function (data, status, xhr) {
         $('#errorMessage').text("Error creating user!"); //error message if user cannot be created
     });
