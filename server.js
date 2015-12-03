@@ -14,7 +14,7 @@ var DB_PORT = 27017;
 mongoose.connect('mongodb://localhost:' + DB_PORT);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
+db.once('open', function(callback) {
     console.log.bind(console, 'connection success');
 });
 
@@ -75,9 +75,88 @@ var MIME_TYPES = {
 }
 
 //starts the server listening on port 3000
-var server = app.listen(3000, function () {
+var server = app.listen(3000, function() {
     var host = server.address().address;
     var port = server.address().port;
 });
 
 console.log('Server running at http://127.0.0.1:' + PORT + '/');
+
+app.get('/users', function(req, res) {
+    User.find({}, function(err, users) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(users);
+    });
+});
+
+app.get('/cottages', function(req, res) {
+    Cottage.find({}, function(err, cottages) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(cottages);
+    });
+});
+
+app.get('/cottageByLocation', function(req, res) {
+    Cottage.find({'location' : req.body.location}, function(err, cottages) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(cottages);
+    });
+});
+
+app.get('/cottageByRating', function(req, res) {
+    Cottage.find({'rating' : {$gte: req.body.rating}}, function(err, cottages) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(cottages);
+    });
+});
+
+app.get('/login', function(req, res) {
+    Cottage.findOne({'email' : req.body.email}, function(err, user) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        if(!user){
+            res.status(400);
+            res.send({
+                    "ErrorCode": "USER_NOT_FOUND"
+                });
+        }
+        if(req.body.password === user.password){
+            //Session stuff here?
+            res.send(user);
+        }
+    });
+});
