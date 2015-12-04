@@ -4,7 +4,9 @@ var path = require('path');
 var app = express();
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser'); //for JSON parsing for request body
+var passport = require('passport');
 var session = require('express-session');
+var bcrypt = require('bcrypt-nodejs');
 
 //set ports for server
 var PORT = 3000;
@@ -12,6 +14,10 @@ var DB_PORT = 27017;
 
 //Connect to MongoDB database
 mongoose.connect('mongodb://localhost:' + DB_PORT);
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function(callback) {
@@ -22,11 +28,28 @@ db.once('open', function(callback) {
 var userSchema = mongoose.Schema({
     firstName: String,
     lastName: String,
-    password: String,
-    email: String,
     description: String,
-    location: String
+    location: String,
+    local: {
+        email: String,
+        password: String
+    },
+    facebook: {
+            id: String,
+            token: String,
+            email: String,
+            name: String
+    }
 });
+
+userSchema.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+userSchema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.local.password);
+};
+
 
 //Create db schema for cottages
 var cottageSchema = mongoose.Schema({
@@ -73,6 +96,67 @@ var MIME_TYPES = {
     '.js': 'text/javascript',
     '.txt': 'text/plain',
 }
+
+//PASSPORT CODE
+var LocalStrategy   = require('passport-local').Strategy;
+
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
+
+passport.use('local-signup', new LocalStrategy({
+        usernameField : 'email',
+        passwordField : 'password',
+        passReqToCallback : true
+    },
+    function(req, email, password, done) {
+        User.findOne({ 'local.email' :  email }, function(err, user) {
+            if (err)
+                return done(err);
+
+            if (user) {
+                return done(null, false, {message: 'User already exists.'});
+            } else {
+                var newUser = new User();
+                newUser.local.email = email;
+                newUser.local.password = newUser.generateHash(password);
+                newUser.save(function(err) {
+                    if (err)
+                        throw err;
+                    return done(null, newUser);
+                });
+            }
+        });
+    })
+);
+passport.use('local-login', new LocalStrategy({
+        usernameField : 'email',
+        passwordField : 'password',
+        passReqToCallback : true
+    },
+    function(req, email, password, done) {
+
+        User.findOne({ 'local.email' :  email }, function(err, user) {
+            if (err)
+                return done(err);
+
+            if (!user)
+                return done(null, false, {message: "Incorrect Email"});
+
+            if (!user.validPassword(password))
+                return done(null, false, {message: "Incorrect Password"});
+            
+            return done(null, user);
+        });
+
+    })
+);
 
 //starts the server listening on port 3000
 var server = app.listen(3000, function() {
@@ -160,3 +244,15 @@ app.get('/login', function(req, res) {
         }
     });
 });
+
+app.post('/signup', passport.authenticate('local-signup', {
+    successRedirect : '/profile', //TODO: write /profile GET handling for user profile page
+    failureRedirect : '/signup', //TODO: write /signup GET handling for singup page
+    failureFlash : false
+}));
+
+app.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/profile', //TODO: same as signup
+        failureRedirect : '/login', //TODO: same as signup
+        failureFlash : false
+    }));
