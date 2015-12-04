@@ -112,13 +112,11 @@ var login = function () { //logs into application
 
 var signUp = function () {
     $('#errorMessageSignUp').text("");
-    if (!$('#inputEmail').val()) {
-        console.log($("#inputEmail").val());
+    if (!$('#inputSignupEmail').val()) {
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
-    if (!$('#inputPassword').val()) {
-        console.log($("#inputPassword"));
+    if (!$('#inputSignupPassword').val()) {
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
