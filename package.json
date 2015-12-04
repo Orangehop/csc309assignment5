@@ -10,6 +10,7 @@
         "mongoose" : "*",
         "jquery" : "*",
         "passport": "*",
+        "passport-local": "*",
         "passport-facebook": "*",
         "bcrypt-nodejs": "latest",
         "express-session" : "*"

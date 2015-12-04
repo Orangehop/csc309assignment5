@@ -113,22 +113,27 @@ var login = function () { //logs into application
 var signUp = function () {
     $('#errorMessageSignUp').text("");
     if (!$('#inputEmail').val()) {
+        console.log($("#inputEmail").val());
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
     if (!$('#inputPassword').val()) {
+        console.log($("#inputPassword"));
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
     if (!$('#inputVerifyPassword').val()) {
+        console.log($("#inputVerifyPassword"));
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
     if (!$('#inputFirstName').val()) {
+        console.log($("#inputFirstName"));
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
     if (!$('#inputLastName').val()) {
+        console.log($("#inputLastName"));
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
@@ -142,7 +147,7 @@ var signUp = function () {
         firstName: $('#inputFirstName').val(),
         lastName: $('#inputLastName').val()
     };
-    $.post('/signUp', formData).success(function (data, status, xhr) { //sends post request to sing up
+    $.post('/signup', formData).success(function (data, status, xhr) { //sends post request to sing up
         $('#landingPage').hide();
         $("#navigation").show();
         $('navbarProfile').show();

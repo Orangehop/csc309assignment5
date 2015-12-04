@@ -16,7 +16,6 @@ var DB_PORT = 27017;
 mongoose.connect('mongodb://localhost:' + DB_PORT);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -24,6 +23,7 @@ db.once('open', function(callback) {
     console.log.bind(console, 'connection success');
 });
 
+var ObjectId = mongoose.Schema.ObjectId;
 //Create db schema for users
 var userSchema = mongoose.Schema({
     firstName: String,
@@ -98,7 +98,7 @@ var MIME_TYPES = {
 }
 
 //PASSPORT CODE
-var LocalStrategy   = require('passport-local').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -149,7 +149,7 @@ passport.use('local-login', new LocalStrategy({
             if (!user)
                 return done(null, false, {message: "Incorrect Email"});
 
-            if (!user.validPassword(password))
+            if (!user.validPassword(user.generateHash(password)))
                 return done(null, false, {message: "Incorrect Password"});
             
             return done(null, user);
