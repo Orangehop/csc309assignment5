@@ -9,6 +9,9 @@
         "bootstrap": "3.3.x",
         "mongoose" : "*",
         "jquery" : "*",
+        "passport": "*",
+        "passport-facebook": "*",
+        "bcrypt-nodejs": "latest",
         "express-session" : "*"
     }
 }
