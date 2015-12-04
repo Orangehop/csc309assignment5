@@ -16,7 +16,6 @@ var DB_PORT = 27017;
 mongoose.connect('mongodb://localhost:' + DB_PORT);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -24,6 +23,7 @@ db.once('open', function(callback) {
     console.log.bind(console, 'connection success');
 });
 
+var ObjectId = mongoose.Schema.ObjectId;
 //Create db schema for users
 var userSchema = mongoose.Schema({
     firstName: String,
@@ -98,7 +98,7 @@ var MIME_TYPES = {
 }
 
 //PASSPORT CODE
-var LocalStrategy   = require('passport-local').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -222,7 +222,7 @@ app.get('/cottageByRating', function(req, res) {
     });
 });
 
-app.get('/login', function(req, res) {
+/*app.get('/login', function(req, res) {
     Cottage.findOne({'email' : req.body.email}, function(err, user) {
         if (err) {
             res.status(500);
@@ -236,23 +236,24 @@ app.get('/login', function(req, res) {
             res.status(400);
             res.send({
                     "ErrorCode": "USER_NOT_FOUND"
-                });
+            });
+            return res.end();
         }
         if(req.body.password === user.password){
             //Session stuff here?
             res.send(user);
         }
     });
-});
+});*/
 
 app.post('/signup', passport.authenticate('local-signup', {
     successRedirect : '/profile', //TODO: write /profile GET handling for user profile page
-    failureRedirect : '/signup', //TODO: write /signup GET handling for singup page
+    failureRedirect : '/',
     failureFlash : false
 }));
 
 app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', //TODO: same as signup
-        failureRedirect : '/login', //TODO: same as signup
-        failureFlash : false
-    }));
+    successRedirect : '/profile', //TODO: same as signup
+    failureRedirect : '/',
+    failureFlash : false
+}));
