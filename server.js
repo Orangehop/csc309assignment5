@@ -149,7 +149,7 @@ passport.use('local-login', new LocalStrategy({
             if (!user)
                 return done(null, false, {message: "Incorrect Email"});
 
-            if (!user.validPassword(user.generateHash(password)))
+            if (!user.validPassword(password))
                 return done(null, false, {message: "Incorrect Password"});
             
             return done(null, user);
@@ -222,7 +222,7 @@ app.get('/cottageByRating', function(req, res) {
     });
 });
 
-app.get('/login', function(req, res) {
+/*app.get('/login', function(req, res) {
     Cottage.findOne({'email' : req.body.email}, function(err, user) {
         if (err) {
             res.status(500);
@@ -236,23 +236,24 @@ app.get('/login', function(req, res) {
             res.status(400);
             res.send({
                     "ErrorCode": "USER_NOT_FOUND"
-                });
+            });
+            return res.end();
         }
         if(req.body.password === user.password){
             //Session stuff here?
             res.send(user);
         }
     });
-});
+});*/
 
 app.post('/signup', passport.authenticate('local-signup', {
     successRedirect : '/profile', //TODO: write /profile GET handling for user profile page
-    failureRedirect : '/signup', //TODO: write /signup GET handling for singup page
+    failureRedirect : '/',
     failureFlash : false
 }));
 
 app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', //TODO: same as signup
-        failureRedirect : '/login', //TODO: same as signup
-        failureFlash : false
-    }));
+    successRedirect : '/profile', //TODO: same as signup
+    failureRedirect : '/',
+    failureFlash : false
+}));

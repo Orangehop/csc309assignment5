@@ -135,7 +135,7 @@ var signUp = function () {
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
-    if ($('#inputVerifyPassword').val() !== $('#inputPassword').val()) { //give error message if new password and verify password do not match
+    if ($('#inputVerifyPassword').val() !== $('#inputSignupPassword').val()) { //give error message if new password and verify password do not match
         $('#errorMessageSignUp').text("Passwords do not match!");
         return;
     };
