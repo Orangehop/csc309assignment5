@@ -246,6 +246,7 @@ app.get('/cottageByRating', function(req, res) {
     });
 });*/
 
+
 app.post('/signup', passport.authenticate('local-signup', {
     successRedirect : '/profile', //TODO: write /profile GET handling for user profile page
     failureRedirect : '/',
@@ -257,3 +258,49 @@ app.post('/login', passport.authenticate('local-login', {
     failureRedirect : '/',
     failureFlash : false
 }));
+
+
+app.post('/createListing', function(req, res) {
+    Cottage.findOne({name : req.body.name}, function(err, cottage){
+        if(err){
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        else if(cottage != null){
+            res.status(400);
+            res.send({
+                "ErrorCode": "COTTAGE_NAME_TAKEN"
+            });
+            console.error("COTTAGE_NAME_TAKEN");
+            return res.end();
+        }
+        else{
+            var newCottage = new Cottage;
+            newCottage.name = req.body.name;
+            newCottage.location = req.body.location;
+            newCottage.rating = -1;
+            newCottage.datesAvailable = req.body.datesAvailable;
+            newCottage.owner = req.body.owner;
+            newCottage.rentAmount = req.body.rentAmount;
+        }
+        newCottage.save(function (err) {
+                    if (err) {
+                        res.status(500);
+                        res.send({
+                            "ErrorCode": "INTERNAL_SERVER_ERROR"
+                        });
+                        console.error(err);
+                        return res.end();
+                    }
+                    else{
+                        res.status(200);
+                        console.log("Listing added successfuly");
+                        return res.end();
+                    }
+        });
+    });
+});
