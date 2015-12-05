@@ -528,6 +528,24 @@
     };
 
     $.fn.ratingLocales.en = {
+        defaultCaption: '',
+        starCaptions: {
+            0.5: '',
+            1: '',
+            1.5: '',
+            2: '',
+            2.5: '',
+            3: '',
+            3.5: '',
+            4: '',
+            4.5: '',
+            5: ''
+        },
+        clearButtonTitle: 'Clear',
+        clearCaption: ''
+    };
+    /*
+    $.fn.ratingLocales.en = {
         defaultCaption: '{rating} Stars',
         starCaptions: {
             0.5: 'Half Star',
@@ -542,8 +560,8 @@
             5: 'Five Stars'
         },
         clearButtonTitle: 'Clear',
-        clearCaption: 'Not Rated'
-    };
+        clearCaption: ''
+    };*/
 
     $.extend($.fn.rating.defaults, $.fn.ratingLocales.en);
 
