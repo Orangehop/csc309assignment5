@@ -99,6 +99,15 @@ var MIME_TYPES = {
 
 //PASSPORT CODE
 var LocalStrategy = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
+
+var configAuth = {
+    'facebookAuth' : {
+        'clientID'      : '942260929195115',
+        'clientSecret'  : '5e1a9f1178c0fbf79e3b46d24cb57e63',
+        'callbackURL'   : 'http://localhost:3000/auth/facebook/callback'
+    }
+};
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -109,6 +118,40 @@ passport.deserializeUser(function(id, done) {
         done(err, user);
     });
 });
+
+passport.use(new FacebookStrategy({
+        clientID        : configAuth.facebookAuth.clientID,
+        clientSecret    : configAuth.facebookAuth.clientSecret,
+        callbackURL     : configAuth.facebookAuth.callbackURL,
+        profileFields: ["emails", "displayName"]
+
+    },
+    // facebook will send back the token and profile
+    function(token, refreshToken, profile, done) {
+        // asynchronous
+        process.nextTick(function() {
+            // find the user in the database based on their facebook id
+            User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
+                if (err)
+                    return done(err);
+                if (user) {
+                    return done(null, user);
+                } else {
+                    var newUser = new User();
+                    newUser.facebook.id    = profile.id;
+                    newUser.facebook.token = token;
+                    newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+                    newUser.facebook.email = profile.emails[0].value;
+                    newUser.save(function(err) {
+                        if (err)
+                            throw err;
+                        return done(null, newUser);
+                    });
+                }
+            });
+        });
+    })
+);
 
 passport.use('local-signup', new LocalStrategy({
         usernameField : 'email',
@@ -157,6 +200,8 @@ passport.use('local-login', new LocalStrategy({
 
     })
 );
+
+
 
 //starts the server listening on port 3000
 var server = app.listen(3000, function() {
@@ -245,6 +290,20 @@ app.get('/cottageByRating', function(req, res) {
         }
     });
 });*/
+
+app.get('/profile', function(req,res) {
+    //TODO: handle this
+    res.redirect('/')
+})
+
+app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', {
+        successRedirect : '/profile',
+        failureRedirect : '/'
+    })
+);
 
 app.post('/signup', passport.authenticate('local-signup', {
     successRedirect : '/profile', //TODO: write /profile GET handling for user profile page
