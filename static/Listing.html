@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>CRUD Application</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="star-rating.js" type="text/javascript"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="style.css" rel="stylesheet">
+    <script src="script.js" type="text/javascript"></script>
+    <script src="Listing.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="star-rating.css" media="all" rel="stylesheet" type="text/css"/>
+
+</head>
+
+    <!-- Used starter code from Bootstrap Examples -->
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Awesome App</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="panel panel-default" id ='Panel'>
+            <div id = 'Name' class="panel-heading">Cottage Name <button type="button" id = 'edit' class="btn btn-danger">Edit Listing</button><button type="button" id = 'save' class="btn btn-success">Save Listing</button></div>
+            <div class="panel-body">
+                <label>Address:</label><span id = 'Address'> 400 Mcgill Ave</span><span id = 'eAddress'><input type="text" class = 'pInput' id="editAddress" value=""></span><br>
+                <label>City:</label><span id = 'City'> Toronto</span><span id = 'eCity'><input type="text" class = 'pInput' id="editCity" value=""></span><br>
+                <label>Province:</label><span id = 'Province'> Ontario</span><span id = 'eProvince'><input type="text" class = 'pInput' id="editProvince" value=""></span><br>
+                <label>Rent:</label><span id = 'Rent'> 600$ A night</span><span id = 'eRent'><input type="text" class = 'pInput' id="editRent" value=""></span><br>
+                <p id = 'Description'>This lovely place in the heart of downtown toronto includes water, wi-fi, electricty. This is merely a fake description used to take up space to test this listing page that I have created. More fake info is what I am typing in right now to take up space. This will be replaced later.</p><span id = 'eDescription'><label>Description:</label><input type="text" class = 'pInput' id="editDescription" value=""></span><br>
+                <table class = "table table-condensed">
+                    <thead>
+                        <th style = 'text-align: center'>Dates Available</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>December 5th, 2015</td>
+                        </tr>
+                        <tr>
+                            <td>December 6th, 2015</td>
+                        </tr>
+                        <tr>
+                            <td>December 7th, 2015</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <label>Contact Info</label>
+                <p>Name: Liam Jackson</p>
+                <p>Email: Lijax@hotmail.com</p>
+                <p>Phone Number: 416-568-4446</p>
+                <p>Insert a comment below <button type="button" id = 'submit' class="btn btn-success">Submit Comment</button></p>
+                <textarea class="form-control" rows="3" id="commentInput"></textarea>
+                <table class = "table table-condensed">
+                    <thead>
+                        <th style = 'text-align: center'>User</th>
+                        <th style = 'text-align: center'>Comment</th>
+                        <th style = 'text-align: center'>Submitted on</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Liam Jackson</td>
+                            <td>Great place. I would gladly recommend staying here if you enjoy the view</td>
+                            <td>December 4th, 2015</td>
+                        </tr>
+                        <tr>
+                            <td>Trevor Anderson</td>
+                            <td>This place stinks, never rent from the owner.</td>
+                            <td>December 2nd, 2015</td>
+                        </tr>
+                        <tr>
+                            <td>Peter Gabriel</td>
+                            <td>This place deserves to be torn down with a sledgehammer</td>
+                            <td>December 1st, 2015</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <!-- /container -->
+
+</body>
+
+</html>

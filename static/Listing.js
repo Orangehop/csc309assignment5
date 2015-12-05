@@ -1,0 +1,51 @@
+$(document).ready(function(){
+	//$("#messageDiv").hide();
+	$('#eAddress').hide();
+	$('#eCity').hide();
+	$('#eProvince').hide();
+	$('#eRent').hide();
+	$('#eDescription').hide();
+	$('#save').hide();
+	$('#edit').click(function(){
+		$('#Address').hide();
+		$('#City').hide();
+		$('#Description').hide();
+		$('#Province').hide();
+		$('#Rent').hide();
+		$('#eDescription').show();
+		$('#eAddress').show();
+		$('#eCity').show();
+		$('#eProvince').show();
+		$('#eRent').show();
+		$('#edit').hide();
+		$('#save').show();
+		$('#editAddress').val($('#Address').text());
+		$('#editCity').val($('#City').text());
+		$('#editDescription').val($('#Description').text());
+		$('#editProvince').val($('#Province').text());
+		$('#editRent').val($('#Rent').text());
+	});
+
+	$('#save').click(function(){
+		$('#Province').show();
+		$('#Rent').show();
+		$('#Address').show();
+		$('#Description').show();
+		$('#City').show();
+		$('#eDescription').hide();
+		$('#eCity').hide();
+		$('#eAddress').hide();
+		$('#eProvince').hide();
+		$('#eRent').hide();
+		$('#save').hide();
+		$('#edit').show();
+		$('#City').text($('#editCity').val());
+		$('#Province').text($('#editProvince').val());
+		$('#Description').text($('#editDescription').val());
+		$('#Address').text($('#editAddress').val());
+		$('#Rent').text($('#editRent').val());
+
+		
+	});
+
+});
