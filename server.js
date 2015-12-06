@@ -291,9 +291,31 @@ app.get('/cottageByRating', function(req, res) {
     });
 });*/
 
+
+/**
+ * /signup /login redirects here
+ * assuming same field information from request is propogated
+ **/
 app.get('/profile', function(req,res) {
-    //TODO: handle this
-    res.redirect('/')
+    User.findOne({email: req.body.email}, function(err, user) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        else if(user == null){
+            res.status(400);
+            res.send({
+                "ErrorCode": "USER_NOT_FOUND_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        res.send(user);
+    });
 })
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
@@ -316,6 +338,7 @@ app.post('/login', passport.authenticate('local-login', {
     failureRedirect : '/',
     failureFlash : false
 }));
+
 
 
 app.post('/createListing', function(req, res) {
