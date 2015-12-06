@@ -79,6 +79,8 @@ app.use('/', express.static(__dirname + '/static'));
 //bind session middleware
 var sess = session({
     secret: 'csc309assignment',
+    resave: true,
+    saveUninitialized: true,
     cookie: {
         secure: true
     }
@@ -123,7 +125,7 @@ passport.use(new FacebookStrategy({
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        profileFields: ["emails", "displayName"]
+        profileFields: ["emails", "displayName", "name"]
 
     },
     // facebook will send back the token and profile
@@ -140,8 +142,10 @@ passport.use(new FacebookStrategy({
                     var newUser = new User();
                     newUser.facebook.id    = profile.id;
                     newUser.facebook.token = token;
-                    newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
                     newUser.facebook.email = profile.emails[0].value;
+                    newUser.facebook.name = profile.name.givenName + " " + profile.name.familyName;
+                    newUser.firstName = profile.name.givenName;
+                    newUser.lastName = profile.name.familyName;
                     newUser.save(function(err) {
                         if (err)
                             throw err;
