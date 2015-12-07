@@ -643,10 +643,10 @@ app.post('/editListing', function(req, res) {
 
 app.get("/success", function(req,res) {
     res.status(200);
-    res.redirect("/");
+    res.send();
 });
 
 app.get("/failure", function(req,res) {
-    res.status(400);
-    res.redirect("/");
+    res.status(401);
+    res.send();
 });

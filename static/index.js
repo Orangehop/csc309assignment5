@@ -159,10 +159,12 @@ var searchButton = function () {
             var place = autocomplete.getPlace();
             console.log(place.geometry.location.lat());
             console.log(place.geometry.location.lng());
+            console.log(place.formated_address);
             $("#errorMessageSearch").text("");
             var formData = {
                 lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng()
+                lng: place.geometry.location.lng(),
+                location: place.formatted_address
             };
             $.post('/cottageByLocation', formData).success(function (data, status, xhr) { //sends post to search
                 var tableHtml = '';
@@ -245,6 +247,7 @@ var login = function () { //logs into application
         password: $('#inputPassword').val()
     };
     $.post('/login', formData).success(function (data, status, xhr) { //sends post request to login
+                console.log(xhr);
         $('#login').hide();
         $('#navigation').show();
         $('#navbarProfile').show();
