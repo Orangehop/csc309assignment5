@@ -88,7 +88,7 @@ var cottageSchema = mongoose.Schema({
     datesAvailable: String,
     owner: ObjectId,
     description: String,
-    rentAmount: Number,
+    rentAmount: String,
     comments: [commentSchema],
     lat: Number,
     lng: Number
@@ -525,7 +525,8 @@ app.post('/getListing', function(req, res) {
                     return res.end();
                 }
                 res.send({
-                    username : user.firstName+" "+user.lastName,
+                    username : user.name,
+                    name: cottage.name,
                     address: cottage.address,
                     location: cottage.location,
                     pricing: cottage.rentAmount,
@@ -643,11 +644,10 @@ app.post('/editListing', function(req, res) {
 app.get("/success", function(req,res) {
     console.log("why doesn't this work");
     res.status(200);
-    res.redirect("/");
+    res.send();
 });
 
 app.get("/failure", function(req,res) {
-    console.log("u fail");
-    res.status(400);
-    res.redirect("/");
+    res.status(401);
+    res.send();
 });
