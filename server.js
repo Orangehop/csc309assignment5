@@ -299,8 +299,8 @@ app.post('/cottageByLocation', function(req, res) {
         }
         res.send(cottages);
     });*/
-    console.log(Number(req.body.lat)-1, req.body.lat-(-1),req.body.lng-1,Number(req.body.lng)+1);
-    Cottage.find({$and : [{'lat': {$gt : Number(req.body.lat)-1, $lt: Number(req.body.lat)+1}}, {'lng': {$gt : Number(req.body.lng)-1, $lt: Number(req.body.lng)+1}}]}, function(err, cottages) {
+    console.log(Number(req.body.lat)-1, req.body.lat-(-1),req.body.lng-2,Number(req.body.lng)+2);
+    Cottage.find({$and : [{'lat': {$gt : Number(req.body.lat)-1, $lt: Number(req.body.lat)+1}}, {'lng': {$gt : Number(req.body.lng)-2, $lt: Number(req.body.lng)+2}}]}, function(err, cottages) {
           if (err) {
             res.status(500);
             res.send({
@@ -316,7 +316,7 @@ app.post('/cottageByLocation', function(req, res) {
             })
             res.send(null);
         }
-        console.log(cottages);
+        cottages.sort(comparator(req.body.lat,req.body.lng))
         res.send(cottages);           
     });
 });
@@ -334,6 +334,12 @@ app.get('/cottageByRating', function(req, res) {
         res.send(cottages);
     });
 });
+
+function comparator(lat, lng) {
+    return function(a,b) {
+        return Math.sqrt(Math.pow(b.lat-lat)+Math.pow(b.lng-lng))-Math.sqrt(Math.pow(a.lat-lat)+Math.pow(a.lng-lng));
+    }
+}
 
 /*app.get('/login', function(req, res) {
     Cottage.findOne({'email' : req.body.email}, function(err, user) {
