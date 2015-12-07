@@ -288,17 +288,6 @@ app.get('/cottages', function(req, res) {
 });
 
 app.post('/cottageByLocation', function(req, res) {
-    /*Cottage.find({'location' : req.body.location}, function(err, cottages) {
-        if (err) {
-            res.status(500);
-            res.send({
-                "ErrorCode": "INTERNAL_SERVER_ERROR"
-            });
-            console.error(err);
-            return res.end();
-        }
-        res.send(cottages);
-    });*/
     console.log(Number(req.body.lat)-1, req.body.lat-(-1),req.body.lng-2,Number(req.body.lng)+2);
     Cottage.find({$and : [{'lat': {$gt : Number(req.body.lat)-1, $lt: Number(req.body.lat)+1}}, {'lng': {$gt : Number(req.body.lng)-2, $lt: Number(req.body.lng)+2}}]}, function(err, cottages) {
           if (err) {
@@ -331,6 +320,7 @@ app.get('/cottageByRating', function(req, res) {
             console.error(err);
             return res.end();
         }
+        cottages.sort(compareRating);
         res.send(cottages);
     });
 });
@@ -339,6 +329,10 @@ function comparator(lat, lng) {
     return function(a,b) {
         return Math.sqrt(Math.pow(b.lat-lat)+Math.pow(b.lng-lng))-Math.sqrt(Math.pow(a.lat-lat)+Math.pow(a.lng-lng));
     }
+}
+
+function compareRating(a,b) {
+    return b.rating-a.rating;
 }
 
 /*app.get('/login', function(req, res) {
