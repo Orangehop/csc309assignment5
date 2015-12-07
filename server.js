@@ -83,7 +83,8 @@ var cottageSchema = mongoose.Schema({
     address: String,
     rating: Number,
     datesAvailable: String,
-    owner: ObjectId,
+    owner: userSchema,
+    description: String,
     rentAmount: Number,
     comments: [commentSchema],
     lat: Number,
@@ -393,14 +394,33 @@ app.post('/createListing', function(req, res) {
         }
         else{
             var newCottage = new Cottage;
-            newCottage.name = req.body.name;
-            newCottage.location = req.body.location;
-            newCottage.rating = -1;
-            newCottage.datesAvailable = req.body.datesAvailable;
-            newCottage.owner = req.body.owner;
-            newCottage.rentAmount = req.body.rentAmount;
-            newCottage.lat = req.body.lat;
-            newCottage.lng = req.body.lng;
+            User.findById(req.body.owner, function(err,user) {
+                if(err) {
+                    res.status(500);
+                    res.send({
+                        "ErrorCode": "INTERNAL_SERVER_ERROR"
+                    });
+                    console.error(err);
+                    return res.end();
+                }
+                if (user==null) {
+                    res.status(404);
+                    res.send({
+                        "ErrorCode": "USER_NOT_FOUND"
+                    });
+                    console.error("USER_NOT_FOUND");
+                    return res.end();
+                }
+                newCottage.name = req.body.name;
+                newCottage.location = req.body.location;
+                newCottage.rating = -1;
+                newCottage.datesAvailable = req.body.datesAvailable;
+                newCottage.owner = user;
+                newCottage.rentAmount = req.body.rentAmount;
+                newCottage.lat = req.body.lat;
+                newCottage.lng = req.body.lng;
+                newCottage.description = req.body.description;
+            });
         }
         newCottage.save(function (err) {
             if (err) {
@@ -443,7 +463,39 @@ app.post('/comment', function(req, res) {
             var comment = new Comment();
             comment.commentor = req.user;
             comment.comment = req.body.comment;
-            cottage.comments.push()
+            cottage.comments.push(comment);
+        }
+    });
+});
+
+app.post('/getListing', function(req, res) {
+    Cottage.findOne({name : req.body.name}, function(err, cottage){
+        if(err){
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        else if(cottage == null){
+            res.status(404);
+            res.send({
+                "ErrorCode": "COTTAGE_NOT_FOUND"
+            });
+            console.error("COTTAGE_NOT_FOUND");
+            return res.end();
+        }
+        else{
+            res.send({
+                username : cottage.owner.firstName+" "+cottage.owner.lastName,
+                address: cottage.address,
+                location: cottage.location,
+                pricing: cottage.rentAmount,
+                description: cottage.description,
+                available: cottage.datesAvailable,
+                comments: cottge.comments
+            });
         }
     });
 });
