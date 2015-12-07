@@ -69,23 +69,27 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 
-
-//Create db schema for cottages
-var cottageSchema = mongoose.Schema({
-    name: String,
-    location: String,
-    rating: Number,
-    datesAvailable: String,
-    owner: ObjectId,
-    rentAmount: Number,
-    comments: [commentSchema]
-});
-
 //Create db schema for comments
 var commentSchema = mongoose.Schema({
     commentor: userSchema,
     comment: String
 });
+
+
+//Create db schema for cottages
+var cottageSchema = mongoose.Schema({
+    name: String,
+    location: String,
+    address: String,
+    rating: Number,
+    datesAvailable: String,
+    owner: ObjectId,
+    rentAmount: Number,
+    comments: [commentSchema],
+    lat: Number,
+    lng: Number
+});
+
 
 
 var User = mongoose.model('User', userSchema);
@@ -243,7 +247,13 @@ var server = app.listen(3000, function() {
     var host = server.address().address;
     var port = server.address().port;
 });
-
+exports.listen = function(port) {
+    console.log('Listening on: ' + port);
+    server.listen(port);
+};
+exports.close = function() {
+    server.close();
+};
 console.log('Server running at http://127.0.0.1:' + PORT + '/');
 
 app.get('/users', function(req, res) {
@@ -389,6 +399,8 @@ app.post('/createListing', function(req, res) {
             newCottage.datesAvailable = req.body.datesAvailable;
             newCottage.owner = req.body.owner;
             newCottage.rentAmount = req.body.rentAmount;
+            newCottage.lat = req.body.lat;
+            newCottage.lng = req.body.lng;
         }
         newCottage.save(function (err) {
             if (err) {

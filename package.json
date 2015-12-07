@@ -14,5 +14,9 @@
     "passport": "*",
     "passport-facebook": "*",
     "passport-local": "*"
+  },
+  "devDependencies": {
+    "jsdom": "^7.1.1",
+    "mocha-jsdom": "^1.0.0"
   }
 }

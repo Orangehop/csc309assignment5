@@ -1,5 +1,59 @@
 var autocomplete;
 
+$(document).ready(function () {
+    $("#messageDiv").hide();
+    $('#eDescription').hide();
+    $('#eUserEmail').hide();
+    $('#eUserLocation').hide();
+    $('#eUserPhone').hide();
+    $('#save').hide();
+    $("#contact").click(function () {
+        $(this).hide();
+        $('#messageDiv').show();
+        $('#comment').val('');
+    });
+    $("#send").click(function () {
+        $('#messageDiv').hide();
+        $('#contact').show();
+        var message = $('#comment').val();
+    });
+
+    $('#edit').click(function () {
+        $('#userLocation').hide();
+        $('#userEmail').hide();
+        $('#userDescription').hide();
+        $('#userPhone').hide();
+        $('#eUserDescription').show();
+        $('#eUserEmail').show();
+        $('#eUserLocation').show();
+        $('#eUserPhone').show();
+        $('#edit').hide();
+        $('#save').show();
+        $('#eUserLocation').val($('#userLocation').text());
+        $('#eUserEmail').val($('#userEmail').text());
+        $('#eUserDescription').val($('#userDescription').text());
+        $('#eUserPhone').val($('#userPhone').text());
+    });
+
+    $('#save').click(function () {
+        $('#userLocation').show();
+        $('#userEmail').show();
+        $('#userDescription').show();
+        $('#userPhone').show();
+        $('#eUserDescription').hide();
+        $('#eUserEmail').hide();
+        $('#eUserLocation').hide();
+        $('#eUserPhone').hide();
+        $('#save').hide();
+        $('#edit').show();
+        $('#userLocation').text($('#eUserLocation').val());
+        $('#userEmail').text($('#eUserEmail').val());
+        $('#userDescription').text($('#eUserDescription').val());
+        $('#userPhone').text($('#eUserPhone').val());
+    });
+
+});
+
 var signUpButton = function () {
     $("#login").hide();
     $("#cover").hide();
@@ -40,6 +94,57 @@ var searchForListingButton = function () {
     autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions);
 }
 
+var getListingPage = function (listingId) {
+    var formData = {
+        listingId: listingId,
+    };
+    $.post('/getListing', formData).success(function (data, status, xhr) { //sends post to search
+        var commentTable = '';
+        for (i = 0; i < data.comments.length; i++) {
+            tableHtml += '<tr><td><a href="javascript:getListingPage(\'' + data.comments[i].userId + '\');">' + data.comments[i].username + '</a></td><td>' + data.comments[i].comment + '</td><td>' + data.comments[i].submitTime + '</td></tr>';
+        };
+        $('#userComments').html(commentTable);
+        $('#listingUser').text(data.username);
+        $('#listingAddress').text(data.address);
+        $('#listingLocation').text(data.location);
+        $('#listingPricing').text(data.pricing);
+        $('#ListingDescription').text(data.description);
+        $('#listingDatesAvailable').text(data.available);
+        $('#eAddress').val(data.address);
+        $('#eLocation').val(data.location);
+        $('#ePricing').val(data.pricing);
+        $('#eDescription').val(data.description);
+        $('#eDatesAvailable').val(data.available);
+        $("#cottageListingPage").show();
+        $("wrapper").not(":eq(#cottageListingPage)").hide();
+    });
+}
+
+var editListing = function () {
+    $("#displayListing").hide();
+    $("#editListing").show();
+}
+
+var getUserPage = function (userId) {
+    var formData = {
+        listingId: listingId,
+    };
+    $.post('/getUser', formData).success(function (data, status, xhr) { //sends post to search
+        $('#userName').text(data.username);
+        $('#userLocation').text(data.location);
+        $('#userEmail').text(data.email);
+        $('#userPhone').text(data.phone);
+        $('#userDescription').text(data.description);
+        $('#eName').val(data.username);
+        $('#eLocation').val(data.location);
+        $('#eEmail').val(data.email);
+        $('#ePhone').val(data.phone);
+        $('#eUserDescription').val(data.description);
+        $("#userProfile").show();
+        $("wrapper").not(":eq(#cottageListingPage)").hide();
+    });
+}
+
 var searchButton = function () {
     if (autocomplete) {
         if (autocomplete.getPlace()) {
@@ -47,6 +152,22 @@ var searchButton = function () {
             console.log(place.geometry.location.lat());
             console.log(place.geometry.location.lng());
             $("#errorMessageSearch").text("");
+            var formData = {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng()
+            };
+            $.post('/searchListings', formData).success(function (data, status, xhr) { //sends post to search
+                var tableHtml = '';
+                for (i = 0; i < data.length; i++) {
+                    tableHtml += '<tr><td><img data-src="holder.js/100x100" class="img-thumbnail" alt="100x100" style="width: 100px; height: 100px;" src="' + data[i].picture + '" data-holder-rendered="true"></td><td><a href="javascript:getListingPage(\'' + data[i].listingId + '\');">' + data[i].name + '</a></td><td><a href="javascript:getListingPage(\'' + data[i].listingId + '\');">' + data[i].displayName + '</a></td></tr>';
+                };
+                $('#listingResults').html(tableHtml);
+                $('#search').hide();
+                $('#searchResults').show();
+
+            }).fail(function (data, status, xhr) {
+                $('#errorMessageSearch').text("Internal Server Error!"); //error message if user cannot be created
+            });
         } else {
             $("#errorMessageSearch").text("Please select a valid location!");
         }
@@ -80,7 +201,21 @@ var createButton = function () {
             var place = autocomplete.getPlace();
             console.log(place.geometry.location.lat());
             console.log(place.geometry.location.lng());
+            var formData = {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+                cottageName: $('#inputCottageName').val(),
+                price: $('#inputPrice').val(),
+                datesAvailable: $('#inputDatesAvailable').val(),
+                description: $('#inputDescription').val()
+            };
             $("#errorMessageCreateListing").text("");
+            $.post('/createListing', formData).success(function (data, status, xhr) { //sends post request to sing up
+                $('#createListingPage').hide();
+                $("#navigation").show();
+            }).fail(function (data, status, xhr) {
+                $('#errorMessage').text("Error creating listing!"); //error message if user cannot be created
+            });
         } else {
             $("#errorMessageCreateListing").text("Please select a valid location!");
         }
@@ -102,9 +237,9 @@ var login = function () { //logs into application
         password: $('#inputPassword').val()
     };
     $.post('/login', formData).success(function (data, status, xhr) { //sends post request to login
-        $('#landingPage').hide();
+        $('#login').hide();
         $('#navigation').show();
-        $('navbarProfile').show();
+        $('#navbarProfile').show();
     }).fail(function (data, status, xhr) {
         $('#errorMessageLogin').text("Authentication Failed!"); // error message if unable to login
     });
@@ -125,16 +260,6 @@ var signUp = function () {
         $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
-    if (!$('#inputFirstName').val()) {
-        console.log($("#inputFirstName"));
-        $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
-        return;
-    };
-    if (!$('#inputLastName').val()) {
-        console.log($("#inputLastName"));
-        $('#errorMessageSignUp').text("Required fields missing!"); //give error message if fields are missing
-        return;
-    };
     if ($('#inputVerifyPassword').val() !== $('#inputSignupPassword').val()) { //give error message if new password and verify password do not match
         $('#errorMessageSignUp').text("Passwords do not match!");
         return;
@@ -147,9 +272,9 @@ var signUp = function () {
     };
     console.log(formData);
     $.post('/signup', formData).success(function (data, status, xhr) { //sends post request to sing up
-        $('#landingPage').hide();
+        $('#signup').hide();
         $("#navigation").show();
-        $('navbarProfile').show();
+        $('#navbarProfile').show();
     }).fail(function (data, status, xhr) {
         $('#errorMessage').text("Error creating user!"); //error message if user cannot be created
     });
