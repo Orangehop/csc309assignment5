@@ -9,6 +9,8 @@ var session = require('express-session');
 var bcrypt = require('bcrypt-nodejs');
 var compress = require('compression');
 app.use(compress());
+
+
 //set ports for server
 var PORT = 3000;
 var DB_PORT = 27017;
