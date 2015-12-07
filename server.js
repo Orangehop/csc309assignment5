@@ -355,20 +355,20 @@ app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' })
 
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', {
-        successRedirect : '/profile',
-        failureRedirect : '/'
+        successRedirect : '/success',
+        failureRedirect : '/failure'
     })
 );
 
 app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect : '/profile', //TODO: write /profile GET handling for user profile page
-    failureRedirect : '/',
+    successRedirect : '/success',
+    failureRedirect : '/failure'
     failureFlash : false
 }));
 
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/profile', //TODO: same as signup
-    failureRedirect : '/',
+    successRedirect : '/success',
+    failureRedirect : '/failure'
     failureFlash : false
 }));
 
@@ -498,4 +498,14 @@ app.post('/getListing', function(req, res) {
             });
         }
     });
+});
+
+app.get("/success", function(req,res) {
+    res.status(200);
+    return res.end();
+});
+
+app.get("/failure", function(req,res) {
+    res.status(400);
+    return res.end();
 });
