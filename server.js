@@ -393,34 +393,26 @@ app.post('/createListing', function(req, res) {
             return res.end();
         }
         else{
-            var newCottage = new Cottage;
-            User.findById(req.body.owner, function(err,user) {
-                if(err) {
-                    res.status(500);
-                    res.send({
-                        "ErrorCode": "INTERNAL_SERVER_ERROR"
-                    });
-                    console.error(err);
-                    return res.end();
-                }
-                if (user==null) {
-                    res.status(404);
-                    res.send({
-                        "ErrorCode": "USER_NOT_FOUND"
-                    });
-                    console.error("USER_NOT_FOUND");
-                    return res.end();
-                }
+            if (!req.user) {
+                res.status(400);
+                res.send({
+                    "ErrorCode": "NOT_LOGGED_IN"
+                });
+                console.error("NOT_LOGGED_IN");
+                return res.end();
+            }
+            else {
+                var newCottage = new Cottage;
                 newCottage.name = req.body.name;
                 newCottage.location = req.body.location;
                 newCottage.rating = -1;
                 newCottage.datesAvailable = req.body.datesAvailable;
-                newCottage.owner = user;
+                newCottage.owner = req.user;
                 newCottage.rentAmount = req.body.rentAmount;
                 newCottage.lat = req.body.lat;
                 newCottage.lng = req.body.lng;
                 newCottage.description = req.body.description;
-            });
+            }
         }
         newCottage.save(function (err) {
             if (err) {
@@ -501,7 +493,7 @@ app.post('/getListing', function(req, res) {
 });
 
 app.post('/getUserByEmail', function(req, res) {
-    User.find({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, users) {
+    User.find({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
         if (err){
             res.status(500);
             res.send({
@@ -514,13 +506,13 @@ app.post('/getUserByEmail', function(req, res) {
         if (!user) {
             res.status(404);
             res.send({
-                "ErrorCode": "COTTAGE_NOT_FOUND"
+                "ErrorCode": "USER_NOT_FOUND"
             });
-            console.error("COTTAGE_NOT_FOUND");
+            console.error("USER_NOT_FOUND");
             return res.end();
         } else {
             res.status(200);
-            res.send(users[0]);
+            res.send(user);
         }
     });
 });
@@ -541,6 +533,60 @@ app.post('/editProfile', function(req, res) {
         res.status(200);
         return res.end();
     }
+});
+
+app.post('/editListing', function(req, res) {
+    Cottage.findOne({name : req.body.name}, function(err, cottage){
+        if(err){
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        else if(cottage == null){
+            res.status(404);
+            res.send({
+                "ErrorCode": "COTTAGE_NOT_FOUND"
+            });
+            console.error("COTTAGE_NOT_FOUND");
+        }
+        else{
+            if (!req.user) {
+                res.status(400);
+                res.send({
+                    "ErrorCode": "NOT_LOGGED_IN"
+                });
+                console.error("NOT_LOGGED_IN");
+                return res.end();
+            }
+            else {
+                cottage.name = req.body.name;
+                cottage.location = req.body.location;
+                cottage.datesAvailable = req.body.datesAvailable;
+                cottage.rentAmount = req.body.rentAmount;
+                cottage.lat = req.body.lat;
+                cottage.lng = req.body.lng;
+                cottage.description = req.body.description;
+            }
+        }
+        newCottage.save(function (err) {
+            if (err) {
+                res.status(500);
+                res.send({
+                    "ErrorCode": "INTERNAL_SERVER_ERROR"
+                });
+                console.error(err);
+                return res.end();
+            }
+            else{
+                res.status(200);
+                console.log("Listing added edited");
+                return res.end();
+            }
+        });
+    });
 });
 
 app.get("/success", function(req,res) {
