@@ -7,7 +7,8 @@ var bodyParser = require('body-parser'); //for JSON parsing for request body
 var passport = require('passport');
 var session = require('express-session');
 var bcrypt = require('bcrypt-nodejs');
-
+var compress = require('compression');
+app.use(compress());
 //set ports for server
 var PORT = 3000;
 var DB_PORT = 27017;
@@ -83,7 +84,7 @@ var cottageSchema = mongoose.Schema({
     address: String,
     rating: Number,
     datesAvailable: String,
-    owner: userSchema,
+    owner: ObjectId,
     description: String,
     rentAmount: Number,
     comments: [commentSchema],
@@ -94,8 +95,8 @@ var cottageSchema = mongoose.Schema({
 
 
 var User = mongoose.model('User', userSchema);
-var Cottage = mongoose.model('Cottage', userSchema);
-var Comment = mongoose.model('Comment', commentSchema)
+var Cottage = mongoose.model('Cottage', cottageSchema);
+var Comment = mongoose.model('Comment', commentSchema);
 
 var MIME_TYPES = {
     '.html': 'text/html',
@@ -224,7 +225,6 @@ passport.use('local-login', new LocalStrategy({
         passReqToCallback : true
     },
     function(req, email, password, done) {
-
         User.findOne({ 'local.email' :  email }, function(err, user) {
             if (err)
                 return done(err);
@@ -234,7 +234,7 @@ passport.use('local-login', new LocalStrategy({
 
             if (!user.validPassword(password))
                 return done(null, false, {message: "Incorrect Password"});
-            
+            console.log("logged in");
             return done(null, user);
         });
 
@@ -402,12 +402,13 @@ app.post('/createListing', function(req, res) {
                 return res.end();
             }
             else {
-                var newCottage = new Cottage;
+                console.log(req.body.name, req.body.location, req.body.datesAvailable, req.user, req.body.rentAmount, req.body.lat, req.body.lng, req.body.description);
+                var newCottage = new Cottage();
                 newCottage.name = req.body.name;
                 newCottage.location = req.body.location;
                 newCottage.rating = -1;
                 newCottage.datesAvailable = req.body.datesAvailable;
-                newCottage.owner = req.user;
+                newCottage.owner = req.user._id;
                 newCottage.rentAmount = req.body.rentAmount;
                 newCottage.lat = req.body.lat;
                 newCottage.lng = req.body.lng;
@@ -479,14 +480,25 @@ app.post('/getListing', function(req, res) {
             return res.end();
         }
         else{
-            res.send({
-                username : cottage.owner.firstName+" "+cottage.owner.lastName,
-                address: cottage.address,
-                location: cottage.location,
-                pricing: cottage.rentAmount,
-                description: cottage.description,
-                available: cottage.datesAvailable,
-                comments: cottge.comments
+            console.log(cottage);
+            User.findById(cottage.owner, function(err,user) {
+                if(err) {
+                    res.status(500);
+                    res.send({
+                        "ErrorCode": "INTERNAL_SERVER_ERROR"
+                    });
+                    console.error(err);
+                    return res.end();
+                }
+                res.send({
+                    username : user.firstName+" "+user.lastName,
+                    address: cottage.address,
+                    location: cottage.location,
+                    pricing: cottage.rentAmount,
+                    description: cottage.description,
+                    available: cottage.datesAvailable,
+                    comments: cottge.comments
+                });
             });
         }
     });
