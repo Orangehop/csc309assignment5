@@ -586,6 +586,7 @@ app.post('/editListing', function(req, res) {
                 return res.end();
             }
         });
+    });
 });
 
 app.get("/success", function(req,res) {
