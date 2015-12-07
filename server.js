@@ -287,8 +287,8 @@ app.get('/cottages', function(req, res) {
     });
 });
 
-app.get('/cottageByLocation', function(req, res) {
-    Cottage.find({'location' : req.body.location}, function(err, cottages) {
+app.post('/cottageByLocation', function(req, res) {
+    /*Cottage.find({'location' : req.body.location}, function(err, cottages) {
         if (err) {
             res.status(500);
             res.send({
@@ -298,6 +298,26 @@ app.get('/cottageByLocation', function(req, res) {
             return res.end();
         }
         res.send(cottages);
+    });*/
+    console.log(Number(req.body.lat)-1, req.body.lat-(-1),req.body.lng-1,Number(req.body.lng)+1);
+    Cottage.find({$and : [{'lat': {$gt : Number(req.body.lat)-1, $lt: Number(req.body.lat)+1}}, {'lng': {$gt : Number(req.body.lng)-1, $lt: Number(req.body.lng)+1}}]}, function(err, cottages) {
+          if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        if (!cottages) {
+            res.status(404);
+            res.send({
+                "ErrorCode": "NO COTTAGES IN RANGE"
+            })
+            res.send(null);
+        }
+        console.log(cottages);
+        res.send(cottages);           
     });
 });
 
