@@ -215,6 +215,8 @@ var createButton = function () {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
                 name: $('#inputCottageName').val(),
+                location: place.formatted_address,
+                address: $('#inputAddress').val(),
                 rentAmount: $('#inputPrice').val(),
                 datesAvailable: $('#inputDatesAvailable').val(),
                 description: $('#inputDescription').val()

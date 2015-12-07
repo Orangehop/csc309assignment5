@@ -35,7 +35,7 @@
                 <div hidden class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="javascript:getCurrentUserProfilePage()" id="navUser">Profile</a></li>
-                        <li><a href="javascript:getDashboardPage()">My Listings</a></li>
+                        <li><a href="javascript:getCurrentUserListings()">My Listings</a></li>
                     </ul>
                 </div>
             </div>
@@ -127,6 +127,8 @@
                 <input type="text" id="inputCottageName" class="form-control" placeholder="Cottage Name" required autofocus>
                 <label for="inputLocation" class="label">Location</label>
                 <input type="text" id="inputLocation" class="form-control" placeholder="City Your Cottage is Near..." required>
+                <label for="inputAddress" class="label">Address</label>
+                <input type="text" id="inputAddress" class="form-control" placeholder="The full address..." required>
                 <label for="inputPrice" class="label">Price</label>
                 <input type="text" id="inputPrice" class="form-control" placeholder="Pricing Scheme" required>
                 <label for="inputDatesAvailable" class="label">Dates Available</label>

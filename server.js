@@ -88,7 +88,7 @@ var cottageSchema = mongoose.Schema({
     datesAvailable: String,
     owner: ObjectId,
     description: String,
-    rentAmount: Number,
+    rentAmount: String,
     comments: [commentSchema],
     lat: Number,
     lng: Number
