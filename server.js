@@ -162,7 +162,7 @@ passport.use(new FacebookStrategy({
                 });
             }
             else {
-                if (!user.facebook) {
+                if (!req.user.facebook) {
                     var user = req.user;
                     user.facebook.id    = profile.id;
                     user.facebook.token = token;
@@ -493,28 +493,33 @@ app.post('/getListing', function(req, res) {
 });
 
 app.post('/getUserByEmail', function(req, res) {
-    User.find({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
-        if (err){
-            res.status(500);
-            res.send({
-                "ErrorCode": "INTERNAL_ERROR"
-            });
-            console.error("INTERNAL_ERROR");
-            return done(err);
-        }
-        
-        if (!user) {
-            res.status(404);
-            res.send({
-                "ErrorCode": "USER_NOT_FOUND"
-            });
-            console.error("USER_NOT_FOUND");
-            return res.end();
-        } else {
-            res.status(200);
-            res.send(user);
-        }
-    });
+    if (req.body.email) {
+        User.find({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
+            if (err){
+                res.status(500);
+                res.send({
+                    "ErrorCode": "INTERNAL_ERROR"
+                });
+                console.error("INTERNAL_ERROR");
+                return done(err);
+            }
+
+            if (!user) {
+                res.status(404);
+                res.send({
+                    "ErrorCode": "USER_NOT_FOUND"
+                });
+                console.error("USER_NOT_FOUND");
+                return res.end();
+            } else {
+                res.status(200);
+                res.send(user);
+            }
+        });
+    }
+    else {
+        res.send(req.user);
+    }
 });
 
 app.post('/editProfile', function(req, res) {
@@ -591,10 +596,10 @@ app.post('/editListing', function(req, res) {
 
 app.get("/success", function(req,res) {
     res.status(200);
-    return res.end();
+    res.redirect("/");
 });
 
 app.get("/failure", function(req,res) {
     res.status(400);
-    return res.end();
+    res.redirect("/");
 });
