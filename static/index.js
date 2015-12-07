@@ -201,9 +201,7 @@ var createButton = function () {
             var place = autocomplete.getPlace();
             console.log(place.geometry.location.lat());
             console.log(place.geometry.location.lng());
-            console.log(place.getName());
             var formData = {
-                location: place.getName(),
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
                 cottageName: $('#inputCottageName').val(),
@@ -213,11 +211,10 @@ var createButton = function () {
             };
             $("#errorMessageCreateListing").text("");
             $.post('/createListing', formData).success(function (data, status, xhr) { //sends post request to sing up
-                $('#signup').hide();
+                $('#createListingPage').hide();
                 $("#navigation").show();
-                $('#navbarProfile').show();
             }).fail(function (data, status, xhr) {
-                $('#errorMessage').text("Error creating user!"); //error message if user cannot be created
+                $('#errorMessage').text("Error creating listing!"); //error message if user cannot be created
             });
         } else {
             $("#errorMessageCreateListing").text("Please select a valid location!");
