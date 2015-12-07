@@ -520,7 +520,8 @@ app.post('/getListing', function(req, res) {
                     return res.end();
                 }
                 res.send({
-                    username : user.firstName+" "+user.lastName,
+                    username : user.name,
+                    name: cottage.name,
                     address: cottage.address,
                     location: cottage.location,
                     pricing: cottage.rentAmount,

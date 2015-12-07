@@ -14,6 +14,7 @@
     <!-- Custom styles for this template -->
     <link href="style.css" rel="stylesheet">
     <script src="index.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="star-rating.css" media="all" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -29,7 +30,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">CottShare</a>
+                <a id="navbarBrand" class="navbar-brand" href="/">CottShare</a>
             </div>
             <div hidden class="container" id="navbarProfile">
                 <div hidden class="navbar-collapse collapse">
@@ -42,239 +43,247 @@
         </div>
     </nav>
 
-    <div class="site-wrapper" id="wrapper">
+    <div class="site-wrapper">
 
         <div class="site-wrapper-inner">
-
-            <div class="cover-container" id="landingPage">
-                <div class="inner cover" id="cover">
-                    <h1 class="cover-heading">CottShare</h1>
-                    <p class="lead">A place where you can lease your cottages.</p>
-                    <p class="lead">
-                        <a href="javascript:loginButton()" class="btn btn-lg btn-default">Login</a>
-                        <a href="javascript:signUpButton()" class="btn btn-lg btn-default">Sign Up</a>
-                        <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-                    </p>
+            <div class="container" id="wrapper">
+                <div class="cover-container" id="landingPage">
+                    <div class="inner cover" id="cover">
+                        <h1 class="cover-heading">CottShare</h1>
+                        <p class="lead">A place where you can lease your cottages.</p>
+                        <p class="lead">
+                            <a href="javascript:loginButton()" class="btn btn-lg btn-default">Login</a>
+                            <a href="javascript:signUpButton()" class="btn btn-lg btn-default">Sign Up</a>
+                            <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div hidden class="container" id="login">
+                <div hidden class="container" id="login">
 
-                <form class="form-signin" id="sign-in-form">
-                    <h2 class="form-signin-heading">Log In</h2>
-                    <h4><span class="label label-danger" id="errorMessageLogin"></span></h4>
-                    <label for="inputEmail" class="sr-only">Email Address</label>
-                    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                    <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                    <div id="buttons">
-                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="login()">Log In</button>
-                        <h4 class='form-signin-heading'>Don't have an account?</h4>
-                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUpButton()">Sign Up</button>
-                    </div>
-                </form>
+                    <form class="form-signin" id="sign-in-form">
+                        <h2 class="form-signin-heading">Log In</h2>
+                        <h4><span class="label label-danger" id="errorMessageLogin"></span></h4>
+                        <label for="inputEmail" class="sr-only">Email Address</label>
+                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <div id="buttons">
+                            <button class="btn btn-lg btn-default btn-block" type="button" onclick="login()">Log In</button>
+                            <h4 class='form-signin-heading'>Don't have an account?</h4>
+                            <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUpButton()">Sign Up</button>
+                        </div>
+                    </form>
 
-            </div>
+                </div>
 
-            <div hidden class="container" id="signup">
+                <div hidden class="container" id="signup">
 
-                <form class="form-signin" id="sign-in-form">
-                    <h2 class="form-signin-heading">Sign Up</h2>
-                    <h4><span class="label label-danger" id="errorMessageSignUp"></span></h4>
-                    <label for="inputSignupEmail" class="sr-only">Email Address</label>
-                    <input type="email" id="inputSignupEmail" class="form-control" placeholder="Email address" required autofocus>
-                    <label for="inputSignupPassword" class="sr-only">Password</label>
-                    <input type="password" id="inputSignupPassword" class="form-control" placeholder="Password" required>
-                    <label for="inputVerifyPassword" class="sr-only">Verify Password</label>
-                    <input type="password" id="inputVerifyPassword" class="form-control" placeholder="Verify Password" required>
-                    <div id="buttons">
-                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUp()">Sign Up</button>
-                        <h4 class='form-signin-heading'>Already have an account?</h4>
-                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="loginButton()">Login</button>
-                    </div>
-                </form>
+                    <form class="form-signin" id="sign-in-form">
+                        <h2 class="form-signin-heading">Sign Up</h2>
+                        <h4><span class="label label-danger" id="errorMessageSignUp"></span></h4>
+                        <label for="inputSignupEmail" class="sr-only">Email Address</label>
+                        <input type="email" id="inputSignupEmail" class="form-control" placeholder="Email address" required autofocus>
+                        <label for="inputSignupPassword" class="sr-only">Password</label>
+                        <input type="password" id="inputSignupPassword" class="form-control" placeholder="Password" required>
+                        <label for="inputVerifyPassword" class="sr-only">Verify Password</label>
+                        <input type="password" id="inputVerifyPassword" class="form-control" placeholder="Verify Password" required>
+                        <div id="buttons">
+                            <button class="btn btn-lg btn-default btn-block" type="button" onclick="signUp()">Sign Up</button>
+                            <h4 class='form-signin-heading'>Already have an account?</h4>
+                            <button class="btn btn-lg btn-default btn-block" type="button" onclick="loginButton()">Login</button>
+                        </div>
+                    </form>
 
-            </div>
+                </div>
 
-            <div hidden class="container" id="navigation">
+                <div hidden class="container" id="navigation">
 
-                <!-- After Login/Signup -->
-                <h1 class="cover-heading">What would you like to do?</h1>
-                <p class="lead">
-                    <a href="javascript:createListingButton()" class="btn btn-lg btn-default">Create a Listing</a>
-                    <a href="javascript:searchForListingButton()" class="btn btn-lg btn-default">Search for a Listing</a>
-                </p>
+                    <!-- After Login/Signup -->
+                    <h1 class="cover-heading">What would you like to do?</h1>
+                    <p class="lead">
+                        <a href="javascript:createListingButton()" class="btn btn-lg btn-default">Create a Listing</a>
+                        <a href="javascript:searchForListingButton()" class="btn btn-lg btn-default">Search for a Listing</a>
+                    </p>
 
-            </div>
+                </div>
 
-            <div hidden class="container" id="search">
-                <h4><span class="label label-danger" id="errorMessageSearch"></span></h4>
-                <h1 class="cover-heading">Where would you like to go?</h1>
+                <div hidden class="container" id="search">
+                    <h4><span class="label label-danger" id="errorMessageSearch"></span></h4>
+                    <h1 class="cover-heading">Where would you like to go?</h1>
 
-                <div class="input-group">
-                    <span class="input-group-btn">
+                    <div class="input-group">
+                        <span class="input-group-btn">
         <button class="btn btn-default btn-lg" type="button" onclick="searchButton()">Search!</button>
       </span>
-                    <input type="text" class="form-control input-lg" id="cottageSearch" placeholder="Search for Cottages near...">
+                        <input type="text" class="form-control input-lg" id="cottageSearch" placeholder="Search for Cottages near...">
+                    </div>
                 </div>
-            </div>
 
-            <div hidden class="container" id="createListingPage">
+                <div hidden class="container" id="createListingPage">
 
-                <h2 class="form-signin-heading">Create A Listing</h2>
-                <h4><span class="label label-danger" id="errorMessageCreateListing"></span></h4>
-                <label for="inputCottageName" class="label">Cottage Name</label>
-                <input type="text" id="inputCottageName" class="form-control" placeholder="Cottage Name" required autofocus>
-                <label for="inputLocation" class="label">Location</label>
-                <input type="text" id="inputLocation" class="form-control" placeholder="City Your Cottage is Near..." required>
-                <label for="inputAddress" class="label">Address</label>
-                <input type="text" id="inputAddress" class="form-control" placeholder="The full address..." required>
-                <label for="inputPrice" class="label">Price</label>
-                <input type="text" id="inputPrice" class="form-control" placeholder="Pricing Scheme" required>
-                <label for="inputDatesAvailable" class="label">Dates Available</label>
-                <input type="text" id="inputDatesAvailable" class="form-control" placeholder="Dates Available" required>
-                <label for="inputDescription" class="label">Description</label>
-                <input type="text" id="inputDescription" class="form-control" placeholder="A Short Description..." required>
-                <div id="buttons">
-                    <button class="btn btn-lg btn-default btn-block" type="button" onclick="createButton()">Create Listing</button>
+                    <h2 class="form-signin-heading">Create A Listing</h2>
+                    <h4><span class="label label-danger" id="errorMessageCreateListing"></span></h4>
+                    <label for="inputCottageName" class="label">Cottage Name</label>
+                    <input type="text" id="inputCottageName" class="form-control" placeholder="Cottage Name" required autofocus>
+                    <label for="inputLocation" class="label">Location</label>
+                    <input type="text" id="inputLocation" class="form-control" placeholder="City Your Cottage is Near..." required>
+                    <label for="inputAddress" class="label">Address</label>
+                    <input type="text" id="inputAddress" class="form-control" placeholder="The full address..." required>
+                    <label for="inputPrice" class="label">Price</label>
+                    <input type="text" id="inputPrice" class="form-control" placeholder="Pricing Scheme" required>
+                    <label for="inputDatesAvailable" class="label">Dates Available</label>
+                    <input type="text" id="inputDatesAvailable" class="form-control" placeholder="Dates Available" required>
+                    <label for="inputDescription" class="label">Description</label>
+                    <input type="text" id="inputDescription" class="form-control" placeholder="A Short Description..." required>
+                    <div id="buttons">
+                        <button class="btn btn-lg btn-default btn-block" type="button" onclick="createButton()">Create Listing</button>
+                    </div>
                 </div>
-            </div>
 
-            <div hidden class="container" id="cottageListingPage">
-                <div class="panel panel-default" id='Panel'>
+                <div hidden class="container" id="cottageListingPage">
                     <div class="container" id="displayListing">
-                        <div id='Name' class="panel-heading">Cottage Name
-                            <button type="button" id='edit' class="btn btn-danger" onclick="editListing()">Edit Listing</button>
-                        </div>
-                        <div class="panel-body">
-                            <label>Address:</label><span id='listingAddress'></span>
-                            <br>
-                            <label>Location:</label><span id='listingLocation'></span>
-                            <br>
-                            <label>Pricing:</label><span id='listingPricing'></span>
-                            <br>
-                            <p id='ListingDescription'></p>
-                            <br>
-                            <label>Dates Available:</label><span id='listingDatesAvailable'></span>
-                            <br>
-                            <label>Listing Contact:</label><span id='listingUser'></span>
-                        </div>
+                        <div class="panel panel-default" id='Panel'>
 
-                        <p>Insert a comment below
-                            <button type="button" id='submit' class="btn btn-success">Submit Comment</button>
-                        </p>
-                        <textarea class="form-control" rows="3" id="commentInput"></textarea>
-                        <table class="table table-condensed">
-                            <thead>
-                                <th style='text-align: center'>User</th>
-                                <th style='text-align: center'>Comment</th>
-                                <th style='text-align: center'>Submitted on</th>
-                            </thead>
-                            <tbody id="userComments">
-                            </tbody>
-                        </table>
-                    </div>
+                            <div id='Name' class="panel-heading"><span id="cottageName"></span>
+                                <button type="button" id='edit' class="btn btn-danger" onclick="editListing()">Edit Listing</button>
+                            </div>
+                            <div class="panel-body">
+                                <label>Address:</label><span id='listingAddress'></span>
+                                <br>
+                                <label>Location:</label><span id='listingLocation'></span>
+                                <br>
+                                <label>Pricing:</label><span id='listingPricing'></span>
+                                <br>
+                                <p id='ListingDescription'></p>
+                                <br>
+                                <label>Dates Available:</label><span id='listingDatesAvailable'></span>
+                                <br>
+                                <label>Listing Contact:</label><span id='listingUser'></span>
+                            </div>
 
-                    <div class="container" id="editListing">
-                        <div id='Name' class="panel-heading">Cottage Name
-                            <button type="button" id='save' class="btn btn-success">Save Listing</button>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <label>Address:</label><span id='eAddress'><input type="text" class = 'pInput' id="editAddress" value=""></span>
-                        <br>
-                        <label>Location:</label><span id='eLocation'><input type="text" class = 'pInput' id="editCity" value=""></span>
-                        <br>
-                        <label>Pricing:</label><span id='ePricing'><input type="text" class = 'pInput' id="editRent" value=""></span>
-                        <br>
-                        <span id='eDescription'><label>Description:</label><input type="text" class = 'pInput' id="editDescription" value=""></span>
-                        <br>
-                        <label>Dates Available:</label><span id='ePricing'><input type="text" class = 'pInput' id="editPricing" value=""></span>
-                        <br>
-                        <label>Listing Contact:</label><span id='listingUser'></span>
-                    </div>
-
-                    <p>Insert a comment below
-                        <button type="button" id='submitComment' class="btn btn-success" onclick="submitComment">Submit Comment</button>
-                    </p>
-                    <textarea class="form-control" rows="3" id="commentInput"></textarea>
-                    <table class="table table-condensed">
-                        <thead>
-                            <th style='text-align: center'>User</th>
-                            <th style='text-align: center'>Comment</th>
-                            <th style='text-align: center'>Submitted on</th>
-                        </thead>
-                        <tbody id="userComments">
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div hidden class="container" id ="userProfilePage">
-            <div class="panel panel-default" id='Panel'>
-                <div id='userName' class="panel-heading">Liam Jackson
-                    <button type="button" id='edit' class="btn btn-danger">Edit Profile</button>
-                    <button type="button" id='save' class="btn btn-success">Save Profile</button>
-                </div>
-                <div class="panel-body">
-                    <div id='Picture'>
-                        <img src="http://therecoveringpolitician.com/wp-content/uploads/2013/01/75819_10152487288070515_316337126_n.jpg" class="img-rounded" id='Picture' alt="Person" width="230" height="230">
-                    </div>
-                    <div id='About'>
-                        <i class="glyphicon glyphicon-map-marker"></i><span id='userLocation'> Toronto, Ontario  </span>
-                        <span id='eUserLocation'>Location: <input type="text" class = 'pInput' id="editLocation" value=""></span>
-                        <br>
-                        <i class="glyphicon glyphicon-envelope"></i><span id='userEmail'> Lijax@hotmail.com</span>
-                        <span id='eUserEmail'>Email: <input type="text" id="editEmail" class = 'pInput' value=""></span>
-                        <br>
-                        <i class="glyphicon glyphicon-earphone"></i><span id='userPhone'> 416-568-4446</span>
-                        <span id='eUserPhone'>Phone: <input type="text" id="editPhone" class = 'pInput' value=""></span>
-                        <p id='userDescription'> This is a description about myself</p>
-                        <p id='eUserDescription'>Description:
-                            <input type="text" class='pInput' id="editDescription" value="">
-                        </p>
-                    </div>
-                    <div id='else'>
-                        <label> Rate This User</labell>
                             <input id="input-21a" value="0" type="number" class="rating" min=0 max=5 step=0.5>
-                            <button type="button" id='contact' class="btn btn-primary">Contact this user</button>
+
+                            <p>Insert a comment below
+                                <button type="button" id='submit' class="btn btn-success">Submit Comment</button>
+                            </p>
+                            <textarea class="form-control" rows="3" id="commentInput"></textarea>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <th style='text-align: center'>User</th>
+                                    <th style='text-align: center'>Comment</th>
+                                    <th style='text-align: center'>Submitted on</th>
+                                </thead>
+                                <tbody id="userComments">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div hidden class="container" id="editListing">
+                        <div class="panel panel-default" id='Panel'>
+                            <div id='Name' class="panel-heading"><span id="editCottageName"></span>
+                                <button type="button" onclick="saveListing()" class="btn btn-success">Save Listing</button>
+                            </div>
+                            <div class="panel-body">
+                                <h4><span class="label label-danger" id="errorEditListing"></span></h4>
+                                <div id="About">
+                                    <label for="editAddress" class="label">Address</label>
+                                    <input type="text" class='form-control' id="editAddress" value="">
+                                    <label for="editLocation" class="label">Location</label>
+                                    <input type="text" class='form-control' id="editLocation" value="">
+                                    <label for="editPrice" class="label">Price</label>
+                                    <input type="text" class='form-control' id="editPrice" value="">
+                                    <label for="editDescription" class="label">Description</label>
+                                    <textarea type="text" class='form-control' id="editDescription" value=""></textarea>
+                                    <label for="editDatesAvailable" class="label">Dates Available</label>
+                                    <input type="text" class='form-control' id="editDatesAvailable" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div hidden class="container" id="userProfilePage">
+                    <div class="container" id="userProfileDisplay">
+                        <div class="panel panel-default" id='Panel'>
+                            <div id='userName' class="panel-heading"><span id="userEmail"></span>
+                                <button type="button" onclick='editUserProfile()' class="btn btn-danger">Edit Profile</button>
+                            </div>
+                            <div class="panel-body">
+                                <div id='About'>
+                                    <i class="glyphicon glyphicon-map-marker"></i><span id='userLocation'></span>
+                                    <br>
+                                    <i class="glyphicon glyphicon-user"></i><span id='userFullName'> </span>
+                                    <br>
+                                    <i class="glyphicon glyphicon-earphone"></i><span id='userPhone'></span>
+                                    <br>
+                                    <p id='userDescription'></p>
+                                </div>
+                                <div id='else'>
+                                    <label> Rate This User</labell>
+                                        <input id="input-21a" value="0" type="number" class="rating" min=0 max=5 step=0.5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div hidden class="container" id="userProfileEdit">
+                        <div class="panel panel-default" id='Panel'>
+                            <div id='userName' class="panel-heading"><span id="userEmail"></span>
+                                <button type="button" onclick='saveUserProfile()' class="btn btn-success">Save Profile</button>
+                            </div>
+                            <div class="panel-body">
+                                <div id='About'>
+                                    <i class="glyphicon glyphicon-map-marker"></i>
+                                    <label for="editLocation" class="label">Location</label>
+                                    <input type="text" class='form-control' id="editLocation" value="" placeholder="">
+                                    <br>
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    <label for="editUserFullName" class="label">Name</label>
+                                    <input type="text" id="editUserFullName" class='form-control' value="">
+                                    <br>
+                                    <i class="glyphicon glyphicon-earphone"></i>
+                                    <label for="editUserPhone" class="label">Phone Number</label>
+                                    <input type="text" id="editUserPhone" class='form-control' value="">
+                                    <br>
+                                    <label for="editUserDescription" class="label">Description</label>
+                                    <textarea class="form-control" rows="3" id="editUserDescription"></textarea>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div hidden class="container" id="searchResults">
+
+                    <div class="container-fluid" onload="populateDashboard()">
+                        <div>
+                            <h3 class="sub-header" id="welcomeMessage">Search Results</h3>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Rating</th>
+                                            <th>Name</th>
+                                            <th>Location</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listingResults">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-
-        <div hidden class="container" id="searchResults">
-
-            <div class="container-fluid" onload="populateDashboard()">
-                <div>
-                    <h3 class="sub-header" id="welcomeMessage">Search Results</h3>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Picture</th>
-                                    <th>Name</th>
-                                    <th>Location</th>
-                                </tr>
-                            </thead>
-                            <tbody id="listingResults">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
         </div>
 
 
-    </div>
-
-
-    <!-- /container -->
+        <!-- /container -->
 
 </body>
 

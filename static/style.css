@@ -263,7 +263,6 @@ body {
     margin-bottom: 20px;
 }
 #Panel {
-    margin-top: 100px;
     background-color: rgba(245, 245, 245, 0.4);
 }
 #Name{
@@ -271,19 +270,4 @@ body {
 }
 .pInput{
     color: black;
-}
-
-#Picture{
-    float: left;
-    position: absolute;
-    margin-left: 40px;
-}
-#About{
-   font-size: 40px;
-   text-align: center;
-   position: relative;
-   padding-left: 230px;
-}
-#else{
-    position: relative;
 }

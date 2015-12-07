@@ -1,59 +1,5 @@
 var autocomplete;
 
-$(document).ready(function () {
-    $("#messageDiv").hide();
-    $('#eDescription').hide();
-    $('#eUserEmail').hide();
-    $('#eUserLocation').hide();
-    $('#eUserPhone').hide();
-    $('#save').hide();
-    $("#contact").click(function () {
-        $(this).hide();
-        $('#messageDiv').show();
-        $('#comment').val('');
-    });
-    $("#send").click(function () {
-        $('#messageDiv').hide();
-        $('#contact').show();
-        var message = $('#comment').val();
-    });
-
-    $('#edit').click(function () {
-        $('#userLocation').hide();
-        $('#userEmail').hide();
-        $('#userDescription').hide();
-        $('#userPhone').hide();
-        $('#eUserDescription').show();
-        $('#eUserEmail').show();
-        $('#eUserLocation').show();
-        $('#eUserPhone').show();
-        $('#edit').hide();
-        $('#save').show();
-        $('#eUserLocation').val($('#userLocation').text());
-        $('#eUserEmail').val($('#userEmail').text());
-        $('#eUserDescription').val($('#userDescription').text());
-        $('#eUserPhone').val($('#userPhone').text());
-    });
-
-    $('#save').click(function () {
-        $('#userLocation').show();
-        $('#userEmail').show();
-        $('#userDescription').show();
-        $('#userPhone').show();
-        $('#eUserDescription').hide();
-        $('#eUserEmail').hide();
-        $('#eUserLocation').hide();
-        $('#eUserPhone').hide();
-        $('#save').hide();
-        $('#edit').show();
-        $('#userLocation').text($('#eUserLocation').val());
-        $('#userEmail').text($('#eUserEmail').val());
-        $('#userDescription').text($('#eUserDescription').val());
-        $('#userPhone').text($('#eUserPhone').val());
-    });
-
-});
-
 var signUpButton = function () {
     $("#login").hide();
     $("#cover").hide();
@@ -70,6 +16,12 @@ var loginButton = function () {
 
 var createListingButton = function () {
     $("#navigation").hide();
+    $("#inputCottageName").val("");
+    $("#inputLocation").val("");
+    $("#inputAddress").val("");
+    $("#inputPrice").val("");
+    $("#inputDatesAvailable").val("");
+    $("#inputDescription").val("");
     $("#createListingPage").show();
     var autoCompleteInput = document.getElementById('inputLocation');
     var autoCompleteOptions = {
@@ -103,40 +55,98 @@ var getListingPage = function (listingName) {
         for (i = 0; i < data.comments.length; i++) {
             tableHtml += '<tr><td><a href="javascript:getListingPage(\'' + data.comments[i].userId + '\');">' + data.comments[i].username + '</a></td><td>' + data.comments[i].comment + '</td><td>' + data.comments[i].submitTime + '</td></tr>';
         };
+        console.log(data);
         $('#userComments').html(commentTable);
+        $('#cottageName').text(data.name);
+        $('#editCottageName').text(data.name);
         $('#listingUser').text(data.username);
         $('#listingAddress').text(data.address);
         $('#listingLocation').text(data.location);
         $('#listingPricing').text(data.pricing);
         $('#ListingDescription').text(data.description);
         $('#listingDatesAvailable').text(data.available);
-        $('#eAddress').val(data.address);
-        $('#eLocation').val(data.location);
-        $('#ePricing').val(data.pricing);
-        $('#eDescription').val(data.description);
-        $('#eDatesAvailable').val(data.available);
+        $('#editAddress').val(data.address);
+        $('#editPrice').val(data.pricing);
+        $('#editDescription').val(data.description);
+        $('#editDatesAvailable').val(data.available);
         $("#cottageListingPage").show();
-        $("wrapper").not(":eq(#cottageListingPage)").hide();
+        $("#searchResults").hide();
     });
 }
 
 var editListing = function () {
     $("#displayListing").hide();
     $("#editListing").show();
+    var autoCompleteInput = document.getElementById('editLocation');
+    var autoCompleteOptions = {
+        types: ['(cities)'],
+        componentRestrictions: {
+            country: 'ca'
+        }
+    };
+    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions);
 }
 
-var updateListing = function () {
-    
+var saveListing = function () {
+if (autocomplete) {
+        if (autocomplete.getPlace()) {
+            var place = autocomplete.getPlace();
+            console.log(place.geometry.location.lat());
+            console.log(place.geometry.location.lng());
+            var formData = {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+                location: place.formatted_address,
+                address: $('#editAddress').val(),
+                rentAmount: $('#editPrice').val(),
+                datesAvailable: $('#editDatesAvailable').val(),
+                description: $('#editDescription').val()
+            };
+            $("#errorEditListing").text("");
+            $.post('/editListing', formData).success(function (data, status, xhr) { //sends post request to sing up
+                $('#editListing').hide();
+                $('#displayListing').show();
+                getListingPage($("#cottageName").text());
+            }).fail(function (data, status, xhr) {
+                $('#errorEditListing').text("Error editing listing!"); //error message if user cannot be created
+            });
+        } else {
+            $("#errorEditListing").text("Please select a valid location!");
+        }
+    }
 }
 
-var updateProfile = function () {
-    
+var saveProfile = function () {
+
+}
+
+var showNavigationPage = function () {
+    $('#navigation').show();
+    $('#navigation').siblings().hide();
 }
 
 var getUserPage = function (email) {
     var formData = {
         email: email,
     };
+    $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
+        $('#userName').text(data.username);
+        $('#userLocation').text(data.location);
+        $('#userEmail').text(data.email);
+        $('#userPhone').text(data.phone);
+        $('#userDescription').text(data.description);
+        $('#eName').val(data.username);
+        $('#eLocation').val(data.location);
+        $('#eEmail').val(data.email);
+        $('#ePhone').val(data.phone);
+        $('#eUserDescription').val(data.description);
+        $("#userProfile").show();
+        $("wrapper").not(":eq(#cottageListingPage)").hide();
+    });
+}
+
+var getCurrentUserPage = function() {
+    var formData = {};
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         $('#userName').text(data.username);
         $('#userLocation').text(data.location);
@@ -169,9 +179,16 @@ var searchButton = function () {
             $.post('/cottageByLocation', formData).success(function (data, status, xhr) { //sends post to search
                 var tableHtml = '';
                 for (i = 0; i < data.length; i++) {
-                    tableHtml += '<tr><td><img data-src="holder.js/100x100" class="img-thumbnail" alt="100x100" style="width: 100px; height: 100px;" src="' + data[i].picture + '" data-holder-rendered="true"></td><td><a href="javascript:getListingPage(\'' + data[i].name + '\');">' + data[i].name + '</a></td><td>' + data[i].location + '</td></tr>';
+                    tableHtml += '<tr><td><span class="label label-default">'
+                    if (data[i].rating === -1) {
+                        tableHtml += 'No Rating';
+                    } else {
+                        tableHtml += data[i].rating + 'Stars';
+                    }
+                    tableHtml += '</span></td><td><a href="javascript:getListingPage(\'' + data[i].name + '\');">' + data[i].name + '</a></td><td>' + data[i].location + '</td></tr>';
                 };
                 $('#listingResults').html(tableHtml);
+                $('#cottageSearch').val("");
                 $('#search').hide();
                 $('#searchResults').show();
 
@@ -234,6 +251,17 @@ var createButton = function () {
     }
 }
 
+var updateListing = function () {
+    var formData = {
+        address: $('#eAddress').val(),
+        location: $('#eLocation').val(),
+        address: $('#ePricing').val(),
+        description: $('#eDescription').val(),
+        datesAvailable: $('#eDatesAvailable').val(),
+        description: $('#editDescription').val()
+    };
+}
+
 var login = function () { //logs into application
     $('#errorMessageLogin').text("");
     if (!$('#inputEmail').val()) {
@@ -249,10 +277,11 @@ var login = function () { //logs into application
         password: $('#inputPassword').val()
     };
     $.post('/login', formData).success(function (data, status, xhr) { //sends post request to login
-                console.log(xhr);
+        console.log(xhr);
         $('#login').hide();
         $('#navigation').show();
         $('#navbarProfile').show();
+        $('#navbarBrand').attr('href', 'javascript:showNavigationPage()');
     }).fail(function (data, status, xhr) {
         $('#errorMessageLogin').text("Authentication Failed!"); // error message if unable to login
     });
@@ -287,6 +316,7 @@ var signUp = function () {
         $('#signup').hide();
         $("#navigation").show();
         $('#navbarProfile').show();
+        $('#navbarBrand').attr('href', 'javascript:showNavigationPage()');
     }).fail(function (data, status, xhr) {
         $('#errorMessage').text("Error creating user!"); //error message if user cannot be created
     });
