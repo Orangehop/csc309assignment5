@@ -1,56 +1,56 @@
 var autocomplete;
 
-$(document).ready(function(){
-	$("#messageDiv").hide();
-	$('#eDescription').hide();
-	$('#eUserEmail').hide();
-	$('#eUserLocation').hide();
-	$('#eUserPhone').hide();
-	$('#save').hide();
-	$("#contact").click(function(){
-		$(this).hide();
-		$('#messageDiv').show();
-		$('#comment').val('');
-	});
-	$("#send").click(function(){
-		$('#messageDiv').hide();
-		$('#contact').show();
-		var message = $('#comment').val();
-	});
+$(document).ready(function () {
+    $("#messageDiv").hide();
+    $('#eDescription').hide();
+    $('#eUserEmail').hide();
+    $('#eUserLocation').hide();
+    $('#eUserPhone').hide();
+    $('#save').hide();
+    $("#contact").click(function () {
+        $(this).hide();
+        $('#messageDiv').show();
+        $('#comment').val('');
+    });
+    $("#send").click(function () {
+        $('#messageDiv').hide();
+        $('#contact').show();
+        var message = $('#comment').val();
+    });
 
-	$('#edit').click(function(){
-		$('#userLocation').hide();
-		$('#userEmail').hide();
-		$('#userDescription').hide();
-		$('#userPhone').hide();
-		$('#eUserDescription').show();
-		$('#eUserEmail').show();
-		$('#eUserLocation').show();
-		$('#eUserPhone').show();
-		$('#edit').hide();
-		$('#save').show();
-		$('#eUserLocation').val($('#userLocation').text());
-		$('#eUserEmail').val($('#userEmail').text());
-		$('#eUserDescription').val($('#userDescription').text());
-		$('#eUserPhone').val($('#userPhone').text());
-	});
+    $('#edit').click(function () {
+        $('#userLocation').hide();
+        $('#userEmail').hide();
+        $('#userDescription').hide();
+        $('#userPhone').hide();
+        $('#eUserDescription').show();
+        $('#eUserEmail').show();
+        $('#eUserLocation').show();
+        $('#eUserPhone').show();
+        $('#edit').hide();
+        $('#save').show();
+        $('#eUserLocation').val($('#userLocation').text());
+        $('#eUserEmail').val($('#userEmail').text());
+        $('#eUserDescription').val($('#userDescription').text());
+        $('#eUserPhone').val($('#userPhone').text());
+    });
 
-	$('#save').click(function(){
-		$('#userLocation').show();
-		$('#userEmail').show();
-		$('#userDescription').show();
-		$('#userPhone').show();
-		$('#eUserDescription').hide();
-		$('#eUserEmail').hide();
-		$('#eUserLocation').hide();
-		$('#eUserPhone').hide();
-		$('#save').hide();
-		$('#edit').show();
-		$('#userLocation').text($('#eUserLocation').val());
-		$('#userEmail').text($('#eUserEmail').val());
-		$('#userDescription').text($('#eUserDescription').val());
-		$('#userPhone').text($('#eUserPhone').val());		
-	});
+    $('#save').click(function () {
+        $('#userLocation').show();
+        $('#userEmail').show();
+        $('#userDescription').show();
+        $('#userPhone').show();
+        $('#eUserDescription').hide();
+        $('#eUserEmail').hide();
+        $('#eUserLocation').hide();
+        $('#eUserPhone').hide();
+        $('#save').hide();
+        $('#edit').show();
+        $('#userLocation').text($('#eUserLocation').val());
+        $('#userEmail').text($('#eUserEmail').val());
+        $('#userDescription').text($('#eUserDescription').val());
+        $('#userPhone').text($('#eUserPhone').val());
+    });
 
 });
 
@@ -120,7 +120,7 @@ var getListingPage = function (listingId) {
     });
 }
 
-var editListing = function (){
+var editListing = function () {
     $("#displayListing").hide();
     $("#editListing").show();
 }
@@ -203,7 +203,7 @@ var createButton = function () {
             console.log(place.geometry.location.lng());
             console.log(place.getName());
             var formData = {
-                placeName: place.getName(),
+                location: place.getName(),
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
                 cottageName: $('#inputCottageName').val(),
@@ -212,6 +212,13 @@ var createButton = function () {
                 description: $('#inputDescription').val()
             };
             $("#errorMessageCreateListing").text("");
+            $.post('/createListing', formData).success(function (data, status, xhr) { //sends post request to sing up
+                $('#signup').hide();
+                $("#navigation").show();
+                $('#navbarProfile').show();
+            }).fail(function (data, status, xhr) {
+                $('#errorMessage').text("Error creating user!"); //error message if user cannot be created
+            });
         } else {
             $("#errorMessageCreateListing").text("Please select a valid location!");
         }

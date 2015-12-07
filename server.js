@@ -55,10 +55,13 @@ userSchema.methods.validPassword = function(password) {
 var cottageSchema = mongoose.Schema({
     name: String,
     location: String,
+    address: String,
     rating: Number,
     datesAvailable: String,
     owner: ObjectId,
-    rentAmount: Number
+    rentAmount: Number,
+    lat: Number,
+    lng: Number
 });
 
 //Create db schema for comments
@@ -377,6 +380,8 @@ app.post('/createListing', function(req, res) {
             newCottage.datesAvailable = req.body.datesAvailable;
             newCottage.owner = req.body.owner;
             newCottage.rentAmount = req.body.rentAmount;
+            newCottage.lat = req.body.lat;
+            newCottage.lng = req.body.lng;
         }
         newCottage.save(function (err) {
                     if (err) {
