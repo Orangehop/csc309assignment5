@@ -125,6 +125,14 @@ var editListing = function () {
     $("#editListing").show();
 }
 
+var updateListing = function () {
+    
+}
+
+var updateProfile = function () {
+    
+}
+
 var getUserPage = function (userId) {
     var formData = {
         listingId: listingId,
@@ -214,7 +222,7 @@ var createButton = function () {
                 $('#createListingPage').hide();
                 $("#navigation").show();
             }).fail(function (data, status, xhr) {
-                $('#errorMessage').text("Error creating listing!"); //error message if user cannot be created
+                $('#errorMessageCreateListing').text("Error creating listing!"); //error message if user cannot be created
             });
         } else {
             $("#errorMessageCreateListing").text("Please select a valid location!");
