@@ -57,10 +57,10 @@ var userSchema = mongoose.Schema({
         password: String
     },
     facebook: {
-            id: String,
-            token: String,
-            email: String,
-            name: String
+        id: String,
+        token: String,
+        email: String,
+        name: String
     }
 });
 
@@ -135,7 +135,6 @@ passport.use(new FacebookStrategy({
         callbackURL     : configAuth.facebookAuth.callbackURL,
         profileFields: ["emails", "displayName", "name"],
         passReqToCallback: true
-
     },
     // facebook will send back the token and profile
     function(req, token, refreshToken, profile, done) {
@@ -165,7 +164,7 @@ passport.use(new FacebookStrategy({
                 });
             }
             else {
-                if (!req.user.facebook) {
+                if (req.user.facebook == "{}") {
                     var user = req.user;
                     user.facebook.id    = profile.id;
                     user.facebook.token = token;
@@ -176,6 +175,9 @@ passport.use(new FacebookStrategy({
                             throw err;
                         return done(null, user);
                     });
+                }
+                else {
+                    return done(null, req.user);
                 }
             }
         });
@@ -209,7 +211,7 @@ passport.use('local-signup', new LocalStrategy({
         }
         else {
             var user = req.user;
-            if (!user.local) {
+            if (user.local == "{}") {
                 user.local.email = email;
                 user.local.password = user.generateHash(password);
                 user.save(function(err) {
@@ -217,6 +219,9 @@ passport.use('local-signup', new LocalStrategy({
                         throw err;
                     return done(null, user);
                 });
+            }
+            else {
+                return done(null, req.user);
             }
         }
     })
@@ -375,12 +380,12 @@ app.get('/profile', function(req,res) {
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
-app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', {
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         successRedirect : '/success',
         failureRedirect : '/failure'
     })
 );
+    
 
 app.post('/signup', passport.authenticate('local-signup', {
     successRedirect : '/success',
@@ -618,7 +623,7 @@ app.post('/editListing', function(req, res) {
                 cottage.description = req.body.description;
             }
         }
-        newCottage.save(function (err) {
+        cottage.save(function (err) {
             if (err) {
                 res.status(500);
                 res.send({
