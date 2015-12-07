@@ -15,6 +15,25 @@ var RECOMMENDATION_RADIUS = 100;
 
 //Connect to MongoDB database
 mongoose.connect('mongodb://localhost:' + DB_PORT);
+//bind session middleware
+var sess = session({
+    secret: 'csc309assignment',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        secure: true
+    }
+});
+var cookieSession = require('cookie-session');
+app.use(cookieSession({   keys: ['key1', 'key2'] }));
+//Serve static files
+app.use('/', express.static(__dirname + '/static'));
+//Bind middleware for parsing response
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(sess);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -53,47 +72,33 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 
+//Create db schema for comments
+var commentSchema = mongoose.Schema({
+    commentor: userSchema,
+    comment: String
+});
+
 
 //Create db schema for cottages
 var cottageSchema = mongoose.Schema({
     name: String,
     location: String,
+    address: String,
     rating: Number,
     datesAvailable: String,
-    owner: ObjectId,
-    rentAmount: Number
+    owner: userSchema,
+    description: String,
+    rentAmount: Number,
+    comments: [commentSchema],
+    lat: Number,
+    lng: Number
 });
 
-//Create db schema for comments
-var commentSchema = mongoose.Schema({
-    cottage: ObjectId,
-    commentor: ObjectId,
-    comment: String
-});
 
 
 var User = mongoose.model('User', userSchema);
 var Cottage = mongoose.model('Cottage', userSchema);
 var Comment = mongoose.model('Comment', commentSchema)
-
-//Serve static files
-app.use('/', express.static(__dirname + '/static'));
-
-//bind session middleware
-var sess = session({
-    secret: 'csc309assignment',
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-        secure: true
-    }
-})
-
-//Bind middleware for parsing response
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
 
 var MIME_TYPES = {
     '.html': 'text/html',
@@ -128,34 +133,51 @@ passport.use(new FacebookStrategy({
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        profileFields: ["emails", "displayName", "name"]
+        profileFields: ["emails", "displayName", "name"],
+        passReqToCallback: true
 
     },
     // facebook will send back the token and profile
-    function(token, refreshToken, profile, done) {
+    function(req, token, refreshToken, profile, done) {
         // asynchronous
         process.nextTick(function() {
             // find the user in the database based on their facebook id
-            User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
-                if (err)
-                    return done(err);
-                if (user) {
-                    return done(null, user);
-                } else {
-                    var newUser = new User();
-                    newUser.facebook.id    = profile.id;
-                    newUser.facebook.token = token;
-                    newUser.facebook.email = profile.emails[0].value;
-                    newUser.facebook.name = profile.name.givenName + " " + profile.name.familyName;
-                    newUser.firstName = profile.name.givenName;
-                    newUser.lastName = profile.name.familyName;
-                    newUser.save(function(err) {
+            if (!req.user) {
+                User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
+                    if (err)
+                        return done(err);
+                    if (user) {
+                        return done(null, user);
+                    } else {
+                        var newUser = new User();
+                        newUser.facebook.id    = profile.id;
+                        newUser.facebook.token = token;
+                        newUser.facebook.email = profile.emails[0].value;
+                        newUser.facebook.name = profile.name.givenName + " " + profile.name.familyName;
+                        newUser.firstName = profile.name.givenName;
+                        newUser.lastName = profile.name.familyName;
+                        newUser.save(function(err) {
+                            if (err)
+                                throw err;
+                            return done(null, newUser);
+                        });
+                    }
+                });
+            }
+            else {
+                if (!user.facebook) {
+                    var user = req.user;
+                    user.facebook.id    = profile.id;
+                    user.facebook.token = token;
+                    user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
+                    user.facebook.email = profile.emails[0].value;
+                    user.save(function(err) {
                         if (err)
                             throw err;
-                        return done(null, newUser);
+                        return done(null, user);
                     });
                 }
-            });
+            }
         });
     })
 );
@@ -166,23 +188,37 @@ passport.use('local-signup', new LocalStrategy({
         passReqToCallback : true
     },
     function(req, email, password, done) {
-        User.findOne({ 'local.email' :  email }, function(err, user) {
-            if (err)
-                return done(err);
+        if (!req.user) {
+            User.findOne({ 'local.email' :  email }, function(err, user) {
+                if (err)
+                    return done(err);
 
-            if (user) {
-                return done(null, false, {message: 'User already exists.'});
-            } else {
-                var newUser = new User();
-                newUser.local.email = email;
-                newUser.local.password = newUser.generateHash(password);
-                newUser.save(function(err) {
+                if (user) {
+                    return done(null, false, {message: 'User already exists.'});
+                } else {
+                    var newUser = new User();
+                    newUser.local.email = email;
+                    newUser.local.password = newUser.generateHash(password);
+                    newUser.save(function(err) {
+                        if (err)
+                            throw err;
+                        return done(null, newUser);
+                    });
+                }
+            });   
+        }
+        else {
+            var user = req.user;
+            if (!user.local) {
+                user.local.email = email;
+                user.local.password = user.generateHash(password);
+                user.save(function(err) {
                     if (err)
                         throw err;
-                    return done(null, newUser);
+                    return done(null, user);
                 });
             }
-        });
+        }
     })
 );
 passport.use('local-login', new LocalStrategy({
@@ -334,45 +370,32 @@ app.get('/cottageByRating', function(req, res) {
  * assuming same field information from request is propogated
  **/
 app.get('/profile', function(req,res) {
-    User.findOne({email: req.body.email}, function(err, user) {
-        if (err) {
-            res.status(500);
-            res.send({
-                "ErrorCode": "INTERNAL_SERVER_ERROR"
-            });
-            console.error(err);
-            return res.end();
-        }
-        else if(user == null){
-            res.status(400);
-            res.send({
-                "ErrorCode": "USER_NOT_FOUND_ERROR"
-            });
-            console.error(err);
-            return res.end();
-        }
-        res.send(user);
-    });
+    if(!req.user) {
+        res.redirect('/');
+    }
+    else {
+        res.send(req.user);
+    }
 })
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', {
-        successRedirect : '/profile',
-        failureRedirect : '/'
+        successRedirect : '/success',
+        failureRedirect : '/failure'
     })
 );
 
 app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect : '/profile', //TODO: write /profile GET handling for user profile page
-    failureRedirect : '/',
+    successRedirect : '/success',
+    failureRedirect : '/failure'
     failureFlash : false
 }));
 
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/profile', //TODO: same as signup
-    failureRedirect : '/',
+    successRedirect : '/success',
+    failureRedirect : '/failure'
     failureFlash : false
 }));
 
@@ -398,27 +421,118 @@ app.post('/createListing', function(req, res) {
         }
         else{
             var newCottage = new Cottage;
-            newCottage.name = req.body.name;
-            newCottage.location = req.body.location;
-            newCottage.rating = -1;
-            newCottage.datesAvailable = req.body.datesAvailable;
-            newCottage.owner = req.body.owner;
-            newCottage.rentAmount = req.body.rentAmount;
+            User.findById(req.body.owner, function(err,user) {
+                if(err) {
+                    res.status(500);
+                    res.send({
+                        "ErrorCode": "INTERNAL_SERVER_ERROR"
+                    });
+                    console.error(err);
+                    return res.end();
+                }
+                if (user==null) {
+                    res.status(404);
+                    res.send({
+                        "ErrorCode": "USER_NOT_FOUND"
+                    });
+                    console.error("USER_NOT_FOUND");
+                    return res.end();
+                }
+                newCottage.name = req.body.name;
+                newCottage.location = req.body.location;
+                newCottage.rating = -1;
+                newCottage.datesAvailable = req.body.datesAvailable;
+                newCottage.owner = user;
+                newCottage.rentAmount = req.body.rentAmount;
+                newCottage.lat = req.body.lat;
+                newCottage.lng = req.body.lng;
+                newCottage.description = req.body.description;
+            });
         }
         newCottage.save(function (err) {
-                    if (err) {
-                        res.status(500);
-                        res.send({
-                            "ErrorCode": "INTERNAL_SERVER_ERROR"
-                        });
-                        console.error(err);
-                        return res.end();
-                    }
-                    else{
-                        res.status(200);
-                        console.log("Listing added successfuly");
-                        return res.end();
-                    }
+            if (err) {
+                res.status(500);
+                res.send({
+                    "ErrorCode": "INTERNAL_SERVER_ERROR"
+                });
+                console.error(err);
+                return res.end();
+            }
+            else{
+                res.status(200);
+                console.log("Listing added successfuly");
+                return res.end();
+            }
         });
     });
+});
+
+
+app.post('/comment', function(req, res) {
+    Cottage.findOne({name : req.body.name}, function(err, cottage){
+        if(err){
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        else if(cottage == null){
+            res.status(404);
+            res.send({
+                "ErrorCode": "COTTAGE_NOT_FOUND"
+            });
+            console.error("COTTAGE_NOT_FOUND");
+            return res.end();
+        }
+        else{
+            var comment = new Comment();
+            comment.commentor = req.user;
+            comment.comment = req.body.comment;
+            cottage.comments.push(comment);
+        }
+    });
+});
+
+app.post('/getListing', function(req, res) {
+    Cottage.findOne({name : req.body.name}, function(err, cottage){
+        if(err){
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        else if(cottage == null){
+            res.status(404);
+            res.send({
+                "ErrorCode": "COTTAGE_NOT_FOUND"
+            });
+            console.error("COTTAGE_NOT_FOUND");
+            return res.end();
+        }
+        else{
+            res.send({
+                username : cottage.owner.firstName+" "+cottage.owner.lastName,
+                address: cottage.address,
+                location: cottage.location,
+                pricing: cottage.rentAmount,
+                description: cottage.description,
+                available: cottage.datesAvailable,
+                comments: cottge.comments
+            });
+        }
+    });
+});
+
+app.get("/success", function(req,res) {
+    res.status(200);
+    return res.end();
+});
+
+app.get("/failure", function(req,res) {
+    res.status(400);
+    return res.end();
 });
