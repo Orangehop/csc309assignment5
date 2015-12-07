@@ -330,10 +330,9 @@ var signUp = function () {
     };
     var formData = {
         email: $('#inputSignupEmail').val(),
-        password: $('#inputSignupPassword').val(),
-        firstName: $('#inputFirstName').val(),
-        lastName: $('#inputLastName').val()
+        password: $('#inputSignupPassword').val()
     };
+    console.log(formData);
     $.post('/signup', formData).success(function (data, status, xhr) { //sends post request to sing up
         window.location.href = ('/application.html');
     }).fail(function (data, status, xhr) {

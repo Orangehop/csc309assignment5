@@ -637,6 +637,7 @@ app.post('/editListing', function(req, res) {
 });
 
 app.get("/success", function(req,res) {
+    res.status(200);
     res.redirect("/application.html");
     res.send();
 });
