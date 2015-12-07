@@ -303,10 +303,7 @@ var login = function () { //logs into application
     };
     $.post('/login', formData).success(function (data, status, xhr) { //sends post request to login
         console.log(xhr);
-        $('#login').hide();
-        $('#navigation').show();
-        $('#navbarProfile').show();
-        $('#navbarBrand').attr('href', 'javascript:showNavigationPage()');
+        window.location.href = ('/application.html');
     }).fail(function (data, status, xhr) {
         $('#errorMessageLogin').text("Authentication Failed!"); // error message if unable to login
     });
@@ -338,10 +335,7 @@ var signUp = function () {
         lastName: $('#inputLastName').val()
     };
     $.post('/signup', formData).success(function (data, status, xhr) { //sends post request to sing up
-        $('#signup').hide();
-        $("#navigation").show();
-        $('#navbarProfile').show();
-        $('#navbarBrand').attr('href', 'javascript:showNavigationPage()');
+        window.location.href = ('/application.html');
     }).fail(function (data, status, xhr) {
         $('#errorMessage').text("Error creating user!"); //error message if user cannot be created
     });

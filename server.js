@@ -642,8 +642,7 @@ app.post('/editListing', function(req, res) {
 });
 
 app.get("/success", function(req,res) {
-    console.log("why doesn't this work");
-    res.status(200);
+    res.redirect("/application.html");
     res.send();
 });
 
