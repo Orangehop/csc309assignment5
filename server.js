@@ -362,13 +362,13 @@ app.get('/auth/facebook/callback',
 
 app.post('/signup', passport.authenticate('local-signup', {
     successRedirect : '/success',
-    failureRedirect : '/failure'
+    failureRedirect : '/failure',
     failureFlash : false
 }));
 
 app.post('/login', passport.authenticate('local-login', {
     successRedirect : '/success',
-    failureRedirect : '/failure'
+    failureRedirect : '/failure',
     failureFlash : false
 }));
 
