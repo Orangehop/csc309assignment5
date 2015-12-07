@@ -88,7 +88,7 @@ var editListing = function () {
 }
 
 var saveListing = function () {
-if (autocomplete) {
+    if (autocomplete) {
         if (autocomplete.getPlace()) {
             var place = autocomplete.getPlace();
             console.log(place.geometry.location.lat());
@@ -125,9 +125,29 @@ var showNavigationPage = function () {
     $('#navigation').siblings().hide();
 }
 
+var getCurrentUserListings = function () {
+    $.get('/cottageByUser').success(function (data, status, xhr) { //sends post to search
+        var tableHtml = '';
+        for (i = 0; i < data.length; i++) {
+            tableHtml += '<tr><td><span class="label label-default">'
+            if (data[i].rating === -1) {
+                tableHtml += 'No Rating';
+            } else {
+                tableHtml += data[i].rating + 'Stars';
+            }
+            tableHtml += '</span></td><td><a href="javascript:getListingPage(\'' + data[i].name + '\');">' + data[i].name + '</a></td><td>' + data[i].location + '</td></tr>';
+        };
+        $('#listingResults').html(tableHtml);
+        $('#cottageSearch').val("");
+        $('#search').hide();
+        $('#searchResults').show();
+    })
+}
+
 var getUserPage = function (email) {
+    console.log("getuser");
     var formData = {
-        email: email,
+        email: email
     };
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         $('#userName').text(data.username);
@@ -142,11 +162,16 @@ var getUserPage = function (email) {
         $('#eUserDescription').val(data.description);
         $("#userProfile").show();
         $("wrapper").not(":eq(#cottageListingPage)").hide();
+    }).fail(function (data, status, xhr) {
+        console.log(xhr);
     });
 }
 
-var getCurrentUserPage = function() {
-    var formData = {};
+var getCurrentUserPage = function () {
+    console.log("getuser");
+    var formData = {
+        email: 'abc@abc.com'
+    };
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         $('#userName').text(data.username);
         $('#userLocation').text(data.location);
@@ -159,7 +184,7 @@ var getCurrentUserPage = function() {
         $('#ePhone').val(data.phone);
         $('#eUserDescription').val(data.description);
         $("#userProfile").show();
-        $("wrapper").not(":eq(#cottageListingPage)").hide();
+        $("#userProfile").siblings().hide();
     });
 }
 
