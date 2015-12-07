@@ -501,7 +501,7 @@ app.post('/getListing', function(req, res) {
 });
 
 app.post('/getUserByEmail', function(req, res) {
-    User.find($or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
+    User.find({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, users) {
         if (err){
             res.status(500);
             res.send({
@@ -520,9 +520,22 @@ app.post('/getUserByEmail', function(req, res) {
             return res.end();
         } else {
             res.status(200);
-            res.send(user);
+            res.send(users[0]);
         }
     });
+});
+
+app.post('/editProfile', function(req, res) {
+    if (!req.user) {
+        res.status(400);
+        res.send({
+            "ErrorCode": "NOT_LOGGED_IN"
+        });
+        console.error("NOT_LOGGED_IN");
+    }
+    else {
+        req.user;
+    }
 });
 
 app.get("/success", function(req,res) {
