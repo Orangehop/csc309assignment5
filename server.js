@@ -534,7 +534,12 @@ app.post('/editProfile', function(req, res) {
         console.error("NOT_LOGGED_IN");
     }
     else {
-        req.user;
+        req.user.firstName = req.body.firstName;
+        req.user.lastName = req.body.lastName;
+        req.user.description = req.body.description;
+        req.user.location = req.body.location;
+        res.status(200);
+        return res.end();
     }
 });
 
