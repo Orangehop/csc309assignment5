@@ -48,8 +48,7 @@ db.once('open', function(callback) {
 var ObjectId = mongoose.Schema.ObjectId;
 //Create db schema for users
 var userSchema = mongoose.Schema({
-    firstName: String,
-    lastName: String,
+    name: String,
     description: String,
     location: String,
     local: {
@@ -153,8 +152,7 @@ passport.use(new FacebookStrategy({
                         newUser.facebook.token = token;
                         newUser.facebook.email = profile.emails[0].value;
                         newUser.facebook.name = profile.name.givenName + " " + profile.name.familyName;
-                        newUser.firstName = profile.name.givenName;
-                        newUser.lastName = profile.name.familyName;
+                        newUser.name = newUser.facebook.name;
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
@@ -169,6 +167,7 @@ passport.use(new FacebookStrategy({
                     user.facebook.id    = profile.id;
                     user.facebook.token = token;
                     user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
+                    user.name = profile.name.givenName + ' ' + profile.name.familyName;
                     user.facebook.email = profile.emails[0].value;
                     user.save(function(err) {
                         if (err)
@@ -579,8 +578,7 @@ app.post('/editProfile', function(req, res) {
         console.error("NOT_LOGGED_IN");
     }
     else {
-        req.user.firstName = req.body.firstName;
-        req.user.lastName = req.body.lastName;
+        req.user.name = req.body.name;
         req.user.description = req.body.description;
         req.user.location = req.body.location;
         res.status(200);
