@@ -220,7 +220,7 @@ passport.use('local-signup', new LocalStrategy({
                     return done(null, user);
                 });
             }
-            else {I 
+            else {
                 return done(null, req.user);
             }
         }
@@ -623,7 +623,7 @@ app.post('/editListing', function(req, res) {
                 cottage.description = req.body.description;
             }
         }
-        newCottage.save(function (err) {
+        cottage.save(function (err) {
             if (err) {
                 res.status(500);
                 res.send({
