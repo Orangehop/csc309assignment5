@@ -11,6 +11,7 @@ var bcrypt = require('bcrypt-nodejs');
 //set ports for server
 var PORT = 3000;
 var DB_PORT = 27017;
+var RECOMMENDATION_RADIUS = 100;
 
 //Connect to MongoDB database
 mongoose.connect('mongodb://localhost:' + DB_PORT);
@@ -30,6 +31,8 @@ var userSchema = mongoose.Schema({
     lastName: String,
     description: String,
     location: String,
+    lat: Number,
+    lng: Number,
     local: {
         email: String,
         password: String
@@ -249,7 +252,7 @@ app.get('/cottages', function(req, res) {
     });
 });
 
-app.get('/cottageByLocation', function(req, res) {
+/*app.get('/cottageByLocation', function(req, res) {
     Cottage.find({'location' : req.body.location}, function(err, cottages) {
         if (err) {
             res.status(500);
@@ -262,6 +265,30 @@ app.get('/cottageByLocation', function(req, res) {
         res.send(cottages);
     });
 });
+*/
+app.get('/cottageByLocation', function(req, res) {
+    var results = [];
+    var cottages = Cottage.find({}, function(err, cottages) {
+        if (err) {
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+    });
+    for(var c in cottages){
+        var distance = google.maps.geometry.spherical.
+            computeDistanceBetween(new google.maps.LatLng(req.body.latitude,req.body.longitude), 
+                                    new google.maps.LatLng(c.lat,c.long));
+        if(distance <= RECOMMENDATION_RADIUS){
+            results.push(c);
+        }
+    }
+    res.send(results);
+});
+
 
 app.get('/cottageByRating', function(req, res) {
     Cottage.find({'rating' : {$gte: req.body.rating}}, function(err, cottages) {
