@@ -273,11 +273,12 @@ var signUp = function () {
         return;
     };
     var formData = {
-        email: $('#inputEmail').val(),
-        password: $('#inputPassword').val(),
+        email: $('#inputSignupEmail').val(),
+        password: $('#inputSignupPassword').val(),
         firstName: $('#inputFirstName').val(),
         lastName: $('#inputLastName').val()
     };
+    console.log(formData);
     $.post('/signup', formData).success(function (data, status, xhr) { //sends post request to sing up
         $('#signup').hide();
         $("#navigation").show();
