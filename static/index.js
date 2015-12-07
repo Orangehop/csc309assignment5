@@ -1,5 +1,61 @@
 var autocomplete;
 
+$(document).ready(function(){
+	$("#messageDiv").hide();
+	$('#eDescription').hide();
+	$('#eEmail').hide();
+	$('#eLocation').hide();
+	$('#ePhone').hide();
+	$('#save').hide();
+	$("#contact").click(function(){
+		$(this).hide();
+		$('#messageDiv').show();
+		$('#comment').val('');
+	});
+	$("#send").click(function(){
+		$('#messageDiv').hide();
+		$('#contact').show();
+		var message = $('#comment').val();
+	});
+
+	$('#edit').click(function(){
+		$('#Location').hide();
+		$('#Email').hide();
+		$('#Description').hide();
+		$('#Phone').hide();
+		$('#eDescription').show();
+		$('#eEmail').show();
+		$('#eLocation').show();
+		$('#ePhone').show();
+		$('#edit').hide();
+		$('#save').show();
+		$('#editLocation').val($('#Location').text());
+		$('#editEmail').val($('#Email').text());
+		$('#editDescription').val($('#Description').text());
+		$('#editPhone').val($('#Phone').text());
+	});
+
+	$('#save').click(function(){
+		$('#Location').show();
+		$('#Email').show();
+		$('#Description').show();
+		$('#Phone').show();
+		$('#eDescription').hide();
+		$('#eEmail').hide();
+		$('#eLocation').hide();
+		$('#ePhone').hide();
+		$('#save').hide();
+		$('#edit').show();
+		$('#Location').text($('#editLocation').val());
+		$('#Email').text($('#editEmail').val());
+		$('#Description').text($('#editDescription').val());
+		$('#Phone').text($('#editPhone').val());
+
+		
+	});
+
+});
+
 var signUpButton = function () {
     $("#login").hide();
     $("#cover").hide();
@@ -56,12 +112,37 @@ var getListingPage = function (listingId) {
         $('#listingPricing').text(data.pricing);
         $('#ListingDescription').text(data.description);
         $('#listingDatesAvailable').text(data.available);
-        $('#eAddress').text(data.address);
-        $('#eLocation').text(data.location);
-        $('#ePricing').text(data.pricing);
-        $('#eDescription').text(data.description);
-        $('#eDatesAvailable').text(data.available);
+        $('#eAddress').val(data.address);
+        $('#eLocation').val(data.location);
+        $('#ePricing').val(data.pricing);
+        $('#eDescription').val(data.description);
+        $('#eDatesAvailable').val(data.available);
         $("#cottageListingPage").show();
+        $("wrapper").not(":eq(#cottageListingPage)").hide();
+    });
+}
+
+var editListing() = function (){
+    $("#displayListing").hide();
+    $("#editListing").show();
+}
+
+var getUserPage = function (userId) {
+    var formData = {
+        listingId: listingId,
+    };
+    $.post('/getUser', formData).success(function (data, status, xhr) { //sends post to search
+        $('#userName').text(data.username);
+        $('#userLocation').text(data.location);
+        $('#userEmail').text(data.email);
+        $('#userPhone').text(data.phone);
+        $('#userDescription').text(data.description);
+        $('#eName').val(data.username);
+        $('#eLocation').val(data.location);
+        $('#eEmail').val(data.email);
+        $('#ePhone').val(data.phone);
+        $('#eUserDescription').val(data.description);
+        $("#userProfile").show();
         $("wrapper").not(":eq(#cottageListingPage)").hide();
     });
 }
