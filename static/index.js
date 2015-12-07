@@ -94,9 +94,9 @@ var searchForListingButton = function () {
     autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions);
 }
 
-var getListingPage = function (listingId) {
+var getListingPage = function (listingName) {
     var formData = {
-        listingId: listingId,
+        listingName: listingId,
     };
     $.post('/getListing', formData).success(function (data, status, xhr) { //sends post to search
         var commentTable = '';
@@ -133,11 +133,11 @@ var updateProfile = function () {
     
 }
 
-var getUserPage = function (userId) {
+var getUserPage = function (email) {
     var formData = {
-        listingId: listingId,
+        email: email,
     };
-    $.post('/getUser', formData).success(function (data, status, xhr) { //sends post to search
+    $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         $('#userName').text(data.username);
         $('#userLocation').text(data.location);
         $('#userEmail').text(data.email);
