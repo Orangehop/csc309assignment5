@@ -164,7 +164,7 @@ var searchButton = function () {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng()
             };
-            $.post('/searchListings', formData).success(function (data, status, xhr) { //sends post to search
+            $.post('/cottageByLocation', formData).success(function (data, status, xhr) { //sends post to search
                 var tableHtml = '';
                 for (i = 0; i < data.length; i++) {
                     tableHtml += '<tr><td><img data-src="holder.js/100x100" class="img-thumbnail" alt="100x100" style="width: 100px; height: 100px;" src="' + data[i].picture + '" data-holder-rendered="true"></td><td><a href="javascript:getListingPage(\'' + data[i].listingId + '\');">' + data[i].name + '</a></td><td><a href="javascript:getListingPage(\'' + data[i].listingId + '\');">' + data[i].displayName + '</a></td></tr>';
@@ -212,8 +212,8 @@ var createButton = function () {
             var formData = {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
-                cottageName: $('#inputCottageName').val(),
-                price: $('#inputPrice').val(),
+                name: $('#inputCottageName').val(),
+                rentAmount: $('#inputPrice').val(),
                 datesAvailable: $('#inputDatesAvailable').val(),
                 description: $('#inputDescription').val()
             };
