@@ -212,7 +212,13 @@ var server = app.listen(3000, function() {
     var host = server.address().address;
     var port = server.address().port;
 });
-
+exports.listen = function(port) {
+    console.log('Listening on: ' + port);
+    server.listen(port);
+};
+exports.close = function() {
+    server.close();
+};
 console.log('Server running at http://127.0.0.1:' + PORT + '/');
 
 app.get('/users', function(req, res) {

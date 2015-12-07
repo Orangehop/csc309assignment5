@@ -1,18 +1,22 @@
 {
-    "name": "project",
-    "description": "CSC309 Assignment 5",
-    "version": "0.0.1",
-    "dependencies": {
-        "express": "4.x",
-        "sessions": "",
-        "body-parser": "https://github.com/expressjs/body-parser",
-        "bootstrap": "3.3.x",
-        "mongoose" : "*",
-        "jquery" : "*",
-        "passport": "*",
-        "passport-local": "*",
-        "passport-facebook": "*",
-        "bcrypt-nodejs": "latest",
-        "express-session" : "*"
-    }
+  "name": "project",
+  "description": "CSC309 Assignment 5",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "4.x",
+    "sessions": "",
+    "body-parser": "https://github.com/expressjs/body-parser",
+    "bootstrap": "3.3.x",
+    "mongoose": "*",
+    "jquery": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "passport-facebook": "*",
+    "bcrypt-nodejs": "latest",
+    "express-session": "*"
+  },
+  "devDependencies": {
+    "jsdom": "^7.1.1",
+    "mocha-jsdom": "^1.0.0"
+  }
 }
