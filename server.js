@@ -435,6 +435,7 @@ app.post('/createListing', function(req, res) {
                 newCottage.location = req.body.location;
                 newCottage.rating = -1;
                 newCottage.datesAvailable = req.body.datesAvailable;
+                newCottage.address = req.body.address;
                 newCottage.owner = req.user._id;
                 newCottage.rentAmount = req.body.rentAmount;
                 newCottage.lat = req.body.lat;
