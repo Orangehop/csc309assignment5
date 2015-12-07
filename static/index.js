@@ -96,7 +96,7 @@ var searchForListingButton = function () {
 
 var getListingPage = function (listingName) {
     var formData = {
-        listingName: listingId,
+        listingName: listingName,
     };
     $.post('/getListing', formData).success(function (data, status, xhr) { //sends post to search
         var commentTable = '';
