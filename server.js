@@ -464,7 +464,7 @@ app.post('/comment', function(req, res) {
 });
 
 app.post('/getListing', function(req, res) {
-    Cottage.findOne({name : req.body.name}, function(err, cottage){
+    Cottage.findOne({name : req.body.listingName}, function(err, cottage){
         if(err){
             res.status(500);
             res.send({
@@ -482,7 +482,6 @@ app.post('/getListing', function(req, res) {
             return res.end();
         }
         else{
-            console.log(cottage);
             User.findById(cottage.owner, function(err,user) {
                 if(err) {
                     res.status(500);
@@ -492,6 +491,14 @@ app.post('/getListing', function(req, res) {
                     console.error(err);
                     return res.end();
                 }
+                if (!user) {
+                    res.status(404);
+                    res.send({
+                        "ErrorCode": "COTTAGE_OWNER_DOES_NOT_EXIST"
+                    });
+                    console.error("COTTAGE_OWNER_DOES_NOT_EXIST");
+                    return res.end();
+                }
                 res.send({
                     username : user.firstName+" "+user.lastName,
                     address: cottage.address,
@@ -499,7 +506,7 @@ app.post('/getListing', function(req, res) {
                     pricing: cottage.rentAmount,
                     description: cottage.description,
                     available: cottage.datesAvailable,
-                    comments: cottge.comments
+                    comments: cottage.comments
                 });
             });
         }
