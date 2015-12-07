@@ -7,6 +7,8 @@ var bodyParser = require('body-parser'); //for JSON parsing for request body
 var passport = require('passport');
 var session = require('express-session');
 var bcrypt = require('bcrypt-nodejs');
+var compress = require('compression');
+app.use(compress());
 
 //set ports for server
 var PORT = 3000;
