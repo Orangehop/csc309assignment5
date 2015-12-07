@@ -500,6 +500,31 @@ app.post('/getListing', function(req, res) {
     });
 });
 
+app.post('/getUserByEmail', function(req, res) {
+    User.find($or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
+        if (err){
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_ERROR"
+            });
+            console.error("INTERNAL_ERROR");
+            return done(err);
+        }
+        
+        if (!user) {
+            res.status(404);
+            res.send({
+                "ErrorCode": "COTTAGE_NOT_FOUND"
+            });
+            console.error("COTTAGE_NOT_FOUND");
+            return res.end();
+        } else {
+            res.status(200);
+            res.send(user);
+        }
+    });
+});
+
 app.get("/success", function(req,res) {
     res.status(200);
     return res.end();
