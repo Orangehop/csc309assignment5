@@ -167,7 +167,7 @@ var searchButton = function () {
             $.post('/cottageByLocation', formData).success(function (data, status, xhr) { //sends post to search
                 var tableHtml = '';
                 for (i = 0; i < data.length; i++) {
-                    tableHtml += '<tr><td><img data-src="holder.js/100x100" class="img-thumbnail" alt="100x100" style="width: 100px; height: 100px;" src="' + data[i].picture + '" data-holder-rendered="true"></td><td><a href="javascript:getListingPage(\'' + data[i].listingId + '\');">' + data[i].name + '</a></td><td><a href="javascript:getListingPage(\'' + data[i].listingId + '\');">' + data[i].displayName + '</a></td></tr>';
+                    tableHtml += '<tr><td><img data-src="holder.js/100x100" class="img-thumbnail" alt="100x100" style="width: 100px; height: 100px;" src="' + data[i].picture + '" data-holder-rendered="true"></td><td><a href="javascript:getListingPage(\'' + data[i].name + '\');">' + data[i].name + '</a></td><td><a href="javascript:getListingPage(\'' + data[i].name + '\');">' + data[i].displayName + '</a></td></tr>';
                 };
                 $('#listingResults').html(tableHtml);
                 $('#search').hide();
@@ -278,7 +278,6 @@ var signUp = function () {
         firstName: $('#inputFirstName').val(),
         lastName: $('#inputLastName').val()
     };
-    console.log(formData);
     $.post('/signup', formData).success(function (data, status, xhr) { //sends post request to sing up
         $('#signup').hide();
         $("#navigation").show();
