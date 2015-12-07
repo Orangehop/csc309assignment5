@@ -142,7 +142,7 @@
                 <div class="panel panel-default" id='Panel'>
                     <div class="container" id="displayListing">
                         <div id='Name' class="panel-heading">Cottage Name
-                            <button type="button" id='edit' class="btn btn-danger">Edit Listing</button>
+                            <button type="button" id='edit' class="btn btn-danger" onclick="editListing()">Edit Listing</button>
                         </div>
                         <div class="panel-body">
                             <label>Address:</label><span id='listingAddress'></span>
@@ -225,42 +225,17 @@
                         <i class="glyphicon glyphicon-map-marker"></i><span id='userLocation'> Toronto, Ontario  </span>
                         <span id='eUserLocation'>Location: <input type="text" class = 'pInput' id="editLocation" value=""></span>
                         <br>
-                        <i class="glyphicon glyphicon-envelope"></i><span id='Email'> Lijax@hotmail.com</span>
-                        <span id='eEmail'>Email: <input type="text" id="editEmail" class = 'pInput' value=""></span>
+                        <i class="glyphicon glyphicon-envelope"></i><span id='userEmail'> Lijax@hotmail.com</span>
+                        <span id='eUserEmail'>Email: <input type="text" id="editEmail" class = 'pInput' value=""></span>
                         <br>
-                        <i class="glyphicon glyphicon-earphone"></i><span id='Phone'> 416-568-4446</span>
-                        <span id='ePhone'>Phone: <input type="text" id="editPhone" class = 'pInput' value=""></span>
-                        <p id='Description'> This is a description about myself</p>
-                        <p id='eDescription'>Description:
+                        <i class="glyphicon glyphicon-earphone"></i><span id='userPhone'> 416-568-4446</span>
+                        <span id='eUserPhone'>Phone: <input type="text" id="editPhone" class = 'pInput' value=""></span>
+                        <p id='userDescription'> This is a description about myself</p>
+                        <p id='eUserDescription'>Description:
                             <input type="text" class='pInput' id="editDescription" value="">
                         </p>
                     </div>
                     <div id='else'>
-                        <p id='Properties'> Properties this user owns</p>
-                        <table class="table table-condensed">
-                            <thead>
-                                <th style='text-align: center'>Cottage Description</th>
-                                <th style='text-align: center'>Location</th>
-                                <th style='text-align: center'>Rent</th>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>A lovely little happy home </td>
-                                    <td>Shitsville, Tenessee</td>
-                                    <td>$800 Monthly</td>
-                                </tr>
-                                <tr>
-                                    <td>A lovely little happy home </td>
-                                    <td>Shitsville, Tenessee</td>
-                                    <td>$800 Monthly</td>
-                                </tr>
-                                <tr>
-                                    <td>A lovely little happy home </td>
-                                    <td>Shitsville, Tenessee</td>
-                                    <td>$800 Monthly</td>
-                                </tr>
-                            </tbody>
-                        </table>
                         <label> Rate This User</labell>
                             <input id="input-21a" value="0" type="number" class="rating" min=0 max=5 step=0.5>
                             <button type="button" id='contact' class="btn btn-primary">Contact this user</button>

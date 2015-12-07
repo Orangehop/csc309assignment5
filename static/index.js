@@ -3,9 +3,9 @@ var autocomplete;
 $(document).ready(function(){
 	$("#messageDiv").hide();
 	$('#eDescription').hide();
-	$('#eEmail').hide();
-	$('#eLocation').hide();
-	$('#ePhone').hide();
+	$('#eUserEmail').hide();
+	$('#eUserLocation').hide();
+	$('#eUserPhone').hide();
 	$('#save').hide();
 	$("#contact").click(function(){
 		$(this).hide();
@@ -19,39 +19,37 @@ $(document).ready(function(){
 	});
 
 	$('#edit').click(function(){
-		$('#Location').hide();
-		$('#Email').hide();
-		$('#Description').hide();
-		$('#Phone').hide();
-		$('#eDescription').show();
-		$('#eEmail').show();
-		$('#eLocation').show();
-		$('#ePhone').show();
+		$('#userLocation').hide();
+		$('#userEmail').hide();
+		$('#userDescription').hide();
+		$('#userPhone').hide();
+		$('#eUserDescription').show();
+		$('#eUserEmail').show();
+		$('#eUserLocation').show();
+		$('#eUserPhone').show();
 		$('#edit').hide();
 		$('#save').show();
-		$('#editLocation').val($('#Location').text());
-		$('#editEmail').val($('#Email').text());
-		$('#editDescription').val($('#Description').text());
-		$('#editPhone').val($('#Phone').text());
+		$('#eUserLocation').val($('#userLocation').text());
+		$('#eUserEmail').val($('#userEmail').text());
+		$('#eUserDescription').val($('#userDescription').text());
+		$('#eUserPhone').val($('#userPhone').text());
 	});
 
 	$('#save').click(function(){
-		$('#Location').show();
-		$('#Email').show();
-		$('#Description').show();
-		$('#Phone').show();
-		$('#eDescription').hide();
-		$('#eEmail').hide();
-		$('#eLocation').hide();
-		$('#ePhone').hide();
+		$('#userLocation').show();
+		$('#userEmail').show();
+		$('#userDescription').show();
+		$('#userPhone').show();
+		$('#eUserDescription').hide();
+		$('#eUserEmail').hide();
+		$('#eUserLocation').hide();
+		$('#eUserPhone').hide();
 		$('#save').hide();
 		$('#edit').show();
-		$('#Location').text($('#editLocation').val());
-		$('#Email').text($('#editEmail').val());
-		$('#Description').text($('#editDescription').val());
-		$('#Phone').text($('#editPhone').val());
-
-		
+		$('#userLocation').text($('#eUserLocation').val());
+		$('#userEmail').text($('#eUserEmail').val());
+		$('#userDescription').text($('#eUserDescription').val());
+		$('#userPhone').text($('#eUserPhone').val());		
 	});
 
 });
@@ -122,7 +120,7 @@ var getListingPage = function (listingId) {
     });
 }
 
-var editListing() = function (){
+var editListing = function (){
     $("#displayListing").hide();
     $("#editListing").show();
 }
