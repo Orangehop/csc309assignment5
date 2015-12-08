@@ -736,9 +736,9 @@ app.post("/rate", function(req,res) {
                 return res.end();
             }
             else {
-                if(!$.inArray(req.user._id, cottage.raters)) {
+                if(cottage.raters.indexOf(req.user._id) == -1) {
                     cottage.ratingcount++;
-                    cottage.rating = cottage.rating*(cottage.ratingcount-1/(cottage.ratingcount)) + req.body.rating/cottage.ratingCount;
+                    cottage.rating = cottage.rating*((cottage.ratingcount-1)/(cottage.ratingcount)) + parseInt(req.body.rating)/cottage.ratingcount;
                     cottage.raters.push(req.user._id);
                     cottage.save(function (err) {
                         if (err) {
@@ -751,7 +751,6 @@ app.post("/rate", function(req,res) {
                         }
                         else{
                             res.status(200);
-                            console.log("Listing added edited");
                             return res.end();
                         }
                     });
