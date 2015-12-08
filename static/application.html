@@ -106,8 +106,10 @@
                                 <br>
                                 <label>Listing Contact:</label><span id='listingUser'></span>
                             </div>
-
-                            <input id="input-21a" value="0" type="number" class="rating" min=0 max=5 step=0.5>
+                            <div id='else'>
+                                <label> Rate This Cottage</label>
+                                <input id="input-21a" value="0" type="number" class="rating" min=0 max=5 step=0.5>
+                            </div>
 
                             <p>Insert a comment below
                                 <button type="button" id='submit' class="btn btn-success">Submit Comment</button>
@@ -152,7 +154,7 @@
                 <div hidden class="container" id="userProfilePage">
                     <div class="container" id="userProfileDisplay">
                         <div class="panel panel-default" id='Panel'>
-                            <div id='userName' class="panel-heading"><span id="userEmail"></span>
+                            <div id='Name' class="panel-heading"><span id="userEmail"></span>
                                 <button type="button" onclick='editUserProfile()' class="btn btn-danger">Edit Profile</button>
                             </div>
                             <div class="panel-body">
@@ -165,19 +167,16 @@
                                     <br>
                                     <p id='userDescription'></p>
                                 </div>
-                                <div id='else'>
-                                    <label> Rate This User</labell>
-                                        <input id="input-21a" value="0" type="number" class="rating" min=0 max=5 step=0.5>
-                                </div>
                             </div>
                         </div>
                     </div>
                     <div hidden class="container" id="userProfileEdit">
                         <div class="panel panel-default" id='Panel'>
-                            <div id='userName' class="panel-heading"><span id="userEmail"></span>
+                            <div id='Name' class="panel-heading"><span id="editUserEmail"></span>
                                 <button type="button" onclick='saveUserProfile()' class="btn btn-success">Save Profile</button>
                             </div>
                             <div class="panel-body">
+                                <h4><span class="label label-danger" id="errorEditListing"></span></h4>
                                 <div id='About'>
                                     <i class="glyphicon glyphicon-map-marker"></i>
                                     <label for="editLocation" class="label">Location</label>

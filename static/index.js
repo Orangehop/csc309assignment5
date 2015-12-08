@@ -116,8 +116,26 @@ var saveListing = function () {
     }
 }
 
-var saveProfile = function () {
+var editUserProfile = function () {
+    $("#userProfileDisplay").hide();
+    $("#userProfileEdit").show();
+}
 
+var saveUserProfile = function () {
+    var formData = {
+        location: $('#editLocation').val(),
+        fullname: $('#editUserFullName').val(),
+        phone: $('#editUserPhone').val(),
+        description: $('#editUserDescription').val()
+    };
+    $("#errorEditProfile").text("");
+    $.post('/editProfile', formData).success(function (data, status, xhr) { //sends post request to sing up
+        $('#userProfileEdit').hide();
+        $('#userProfileDisplay').show();
+        getUserPage($("#userEmail").text());
+    }).fail(function (data, status, xhr) {
+        $('#errorEditListing').text("Error editing profile!"); //error message if user cannot be created
+    });
 }
 
 var showNavigationPage = function () {
@@ -150,7 +168,8 @@ var getUserPage = function (email) {
         email: email
     };
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
-        $('#userName').text(data.username);
+        console.log(data);
+        $('#userEmail').text(data.username);
         $('#userLocation').text(data.location);
         $('#userEmail').text(data.email);
         $('#userPhone').text(data.phone);
@@ -169,22 +188,21 @@ var getUserPage = function (email) {
 
 var getCurrentUserPage = function () {
     console.log("getuser");
-    var formData = {
-        email: 'abc@abc.com'
-    };
+    var formData = {};
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
-        $('#userName').text(data.username);
-        $('#userLocation').text(data.location);
-        $('#userEmail').text(data.email);
-        $('#userPhone').text(data.phone);
-        $('#userDescription').text(data.description);
-        $('#eName').val(data.username);
-        $('#eLocation').val(data.location);
-        $('#eEmail').val(data.email);
-        $('#ePhone').val(data.phone);
-        $('#eUserDescription').val(data.description);
-        $("#userProfile").show();
-        $("#userProfile").siblings().hide();
+        console.log(data);
+        $('#userEmail').text(data.local.email);
+        $('#editUserEmail').text(data.local.email);
+        $('#userLocation').text(data.local.location);
+        $('#userFullName').text(data.local.fullname);
+        $('#userPhone').text(data.local.phone);
+        $('#userDescription').text(data.local.description);
+        $('#editUserFullName').val(data.local.fullname);
+        $('#editLocation').val(data.local.location);
+        $('#editUserPhone').val(data.local.phone);
+        $('#editUserDescription').val(data.local.description);
+        $("#userProfilePage").show();
+        $("#userProfilePage").siblings().hide();
     });
 }
 
