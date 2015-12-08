@@ -53,7 +53,7 @@ var getListingPage = function (listingName) {
     $.post('/getListing', formData).success(function (data, status, xhr) { //sends post to search
         var commentTable = '';
         for (i = 0; i < data.comments.length; i++) {
-            tableHtml += '<tr><td><a href="javascript:getListingPage(\'' + data.comments[i].email + '\');">' + data.comments[i].email + '</a></td><td>' + data.comments[i].comment + '</td></tr>';
+            commentTable += '<tr><td><a href="javascript:getUserPage(\'' + data.comments[i].commentor.local.email + '\');">' + data.comments[i].commentor.local.email + '</a></td><td>' + data.comments[i].comment + '</td></tr>';
         };
         console.log(data);
         $('#userComments').html(commentTable);
