@@ -89,7 +89,9 @@ var submitComment = function () {
         name: $('#cottageName').text(),
         comment: $('#commentInput').val()
     };
+    console.log(formData);
     $.post('/comment', formData).success(function (data, status, xhr) { //sends post request to sing up
+        console.log(xhr);
         $('#commentInput').val("");
         getListingPage($('#cottageName').text());
     });
