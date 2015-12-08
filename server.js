@@ -72,12 +72,6 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 
-//Create db schema for comments
-var commentSchema = mongoose.Schema({
-    commentor: userSchema,
-    comment: String
-});
-
 
 //Create db schema for cottages
 var cottageSchema = mongoose.Schema({
@@ -91,7 +85,7 @@ var cottageSchema = mongoose.Schema({
     owner: ObjectId,
     description: String,
     rentAmount: String,
-    comments: [commentSchema],
+    comments:  [{commentor: userSchema, comment: String}],
     lat: Number,
     lng: Number
 });
@@ -100,7 +94,6 @@ var cottageSchema = mongoose.Schema({
 
 var User = mongoose.model('User', userSchema);
 var Cottage = mongoose.model('Cottage', cottageSchema);
-var Comment = mongoose.model('Comment', commentSchema);
 
 var MIME_TYPES = {
     '.html': 'text/html',
@@ -498,11 +491,8 @@ app.post('/comment', function(req, res) {
             return res.end();
         }
         else{
-            var comment = new Comment();
-            comment.commentor = req.user;
-            comment.comment = req.body.comment;
-            comment.save();
-            cottage.comments.push(comment);
+            console.log(req.user.name + " commented");
+            cottage.comments.push({commentor:req.user,comment:req.body.comment});
             cottage.save();
             res.status(200);
             res.send();
