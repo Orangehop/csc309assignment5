@@ -546,7 +546,7 @@ app.post('/getListing', function(req, res) {
 
 app.post('/getUserByEmail', function(req, res) {
     if (req.body.email) {
-        User.find({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
+        User.findOne({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
             if (err){
                 res.status(500);
                 res.send({
