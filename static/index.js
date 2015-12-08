@@ -1,5 +1,6 @@
 var autocomplete;
 
+//Event Handling for sign up button, shows correct page
 var signUpButton = function () {
     $("#login").hide();
     $("#cover").hide();
@@ -7,6 +8,7 @@ var signUpButton = function () {
     $('#errorMessageSignUp').text("");
 }
 
+//Event Handling for login in button, shows correct page
 var loginButton = function () {
     $("#signup").hide();
     $("#cover").hide();
@@ -14,8 +16,10 @@ var loginButton = function () {
     $('#errorMessageLogin').text("");
 }
 
+//Event handling for creat listing button on the navigation page
 var createListingButton = function () {
     $("#navigation").hide();
+    //Reset all form values
     $("#inputCottageName").val("");
     $("#inputLocation").val("");
     $("#inputAddress").val("");
@@ -23,39 +27,41 @@ var createListingButton = function () {
     $("#inputDatesAvailable").val("");
     $("#inputDescription").val("");
     $("#createListingPage").show();
-    var autoCompleteInput = document.getElementById('inputLocation');
-    var autoCompleteOptions = {
+    var autoCompleteInput = document.getElementById('inputLocation'); //bind google auto complete to input field
+    var autoCompleteOptions = { //set google autocomplete options
         types: ['(cities)'],
         componentRestrictions: {
             country: 'ca'
         }
     };
-    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions);
-}
+    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions); //bind google auto complete to input field
+} 
 
+//Event handling for search listing button on the navigation page
 var searchForListingButton = function () {
     $("#navigation").hide();
     $("#search").show();
-    var autoCompleteInput = document.getElementById('cottageSearch');
-    var autoCompleteOptions = {
+    var autoCompleteInput = document.getElementById('cottageSearch'); //bind google auto complete to input field
+    var autoCompleteOptions = { //set google autocomplete options
         types: ['(cities)'],
         componentRestrictions: {
             country: 'ca'
         }
     };
-    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions);
+    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions); //bind google auto complete to input field
 }
 
+//Gets the listing given the provided name of listing
 var getListingPage = function (listingName) {
     var formData = {
         listingName: listingName,
     };
     $.post('/getListing', formData).success(function (data, status, xhr) { //sends post to search
         var commentTable = '';
-        for (i = 0; i < data.comments.length; i++) {
-            tableHtml += '<tr><td><a href="javascript:getListingPage(\'' + data.comments[i].email + '\');">' + data.comments[i].email + '</a></td><td>' + data.comments[i].comment + '</td></tr>';
+        for (i = 0; i < data.comments.length; i++) { //Populates the search result table
+            commentTable += '<tr><td><a href="javascript:getUserPage(\'' + data.comments[i].commentor.local.email + '\');">' + data.comments[i].commentor.local.email + '</a></td><td>' + data.comments[i].comment + '</td></tr>';
         };
-        console.log(data);
+        //Updates fields to display data
         $('#userComments').html(commentTable);
         $('#cottageName').text(data.name);
         $('#editCottageName').text(data.name);
@@ -70,7 +76,7 @@ var getListingPage = function (listingName) {
         $('#editDescription').val(data.description);
         $('#editDatesAvailable').val(data.available);
         $('#input-21a').attr("value", data.rating);
-        $('#input-21a').on('rating.change', function (event, value, caption) {
+        $('#input-21a').on('rating.change', function (event, value, caption) { //Bind action for rating bar
             var formData = {
                 name: $('#cottageName').text(),
                 rating: value
@@ -84,6 +90,7 @@ var getListingPage = function (listingName) {
     });
 }
 
+//Event handling for the submit comment button
 var submitComment = function () {
     var formData = {
         name: $('#cottageName').text(),
@@ -91,32 +98,35 @@ var submitComment = function () {
     };
     console.log(formData);
     $.post('/comment', formData).success(function (data, status, xhr) { //sends post request to sing up
+        console.log(xhr);
         $('#commentInput').val("");
         getListingPage($('#cottageName').text());
     });
 }
 
+//Event handling for the edit listing button
 var editListing = function () {
     $("#displayListing").hide();
     $("#editLocation").val("");
     $("#editListing").show();
-    var autoCompleteInput = document.getElementById('editLocation');
-    var autoCompleteOptions = {
+    var autoCompleteInput = document.getElementById('editLocation'); //bind google auto complete to input field
+    var autoCompleteOptions = { //Set google search options
         types: ['(cities)'],
         componentRestrictions: {
             country: 'ca'
         }
     };
-    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions);
+    autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, autoCompleteOptions); //bind google auto complete to input field
 }
 
+//Event handling for save listing option
 var saveListing = function () {
     if (autocomplete) {
         if (autocomplete.getPlace()) {
             var place = autocomplete.getPlace();
             console.log(place.geometry.location.lat());
             console.log(place.geometry.location.lng());
-            var formData = {
+            var formData = { //Sends request with values from fields
                 name: $('#cottageName').text(),
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
@@ -128,12 +138,12 @@ var saveListing = function () {
             };
             console.log(formData);
             $("#errorEditListing").text("");
-            $.post('/editListing', formData).success(function (data, status, xhr) { //sends post request to sing up
+            $.post('/editListing', formData).success(function (data, status, xhr) { //sends post request to update listing
                 $('#editListing').hide();
                 $('#displayListing').show();
                 getListingPage($("#cottageName").text());
             }).fail(function (data, status, xhr) {
-                $('#errorEditListing').text("Error editing listing!"); //error message if user cannot be created
+                $('#errorEditListing').text("Error editing listing!"); //error message if listing cannot be edited
             });
         } else {
             $("#errorEditListing").text("Please select a valid location!");
@@ -160,19 +170,21 @@ var saveUserProfile = function () {
         $('#userProfileDisplay').show();
         getUserPage($("#userEmail").text());
     }).fail(function (data, status, xhr) {
-        $('#errorEditListing').text("Error editing profile!"); //error message if user cannot be created
+        $('#errorEditListing').text("Error editing profile!"); //error message if user cannot be edited
     });
 }
 
+//Event handling for the home button on navigation bar
 var showNavigationPage = function () {
     $('#navigation').show();
     $('#navigation').siblings().hide();
 }
 
+//Event handling for the my listings button
 var getCurrentUserListings = function () {
     $.post('/cottageByUser').success(function (data, status, xhr) { //sends post to search
         var tableHtml = '';
-        for (i = 0; i < data.length; i++) {
+        for (i = 0; i < data.length; i++) { //Populates search result table with listings created by current user
             tableHtml += '<tr><td><span class="label label-default">'
             if (data[i].rating === -1) {
                 tableHtml += 'No Rating';
@@ -182,13 +194,12 @@ var getCurrentUserListings = function () {
             tableHtml += '</span></td><td><a href="javascript:getListingPage(\'' + data[i].name + '\');">' + data[i].name + '</a></td><td>' + data[i].location + '</td></tr>';
         };
         $('#listingResults').html(tableHtml);
-        $('#cottageSearch').val("");
-        $('#search').hide();
+        $('#searchResults').siblings().hide();
         $('#searchResults').show();
     })
 }
 
-var getUserPage = function (email) {
+var getUserPage = function (email) { //Gets user page of given email address
     console.log("getuser");
     var formData = {
         email: email
@@ -197,6 +208,7 @@ var getUserPage = function (email) {
         console.log(data);
         $('#userEmail').text(data.email);
         $('#editUserEmail').text(data.email);
+        //Updates user page with correct information
         $('#userLocation').text(data.location);
         $('#userFullName').text(data.name);
         $('#userPhone').text(data.phone);
@@ -212,7 +224,7 @@ var getUserPage = function (email) {
     });
 }
 
-var getCurrentUserPage = function () {
+var getCurrentUserPage = function () { //Gets Current user page
     var formData = {};
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         console.log(data);
@@ -231,10 +243,10 @@ var getCurrentUserPage = function () {
     });
 }
 
-var searchButton = function () {
+var searchButton = function () { //Searches item in the search bar
     if (autocomplete) {
-        if (autocomplete.getPlace()) {
-            var place = autocomplete.getPlace();
+        if (autocomplete.getPlace()) { //gets google autocomplete entry
+            var place = autocomplete.getPlace(); 
             console.log(place.geometry.location.lat());
             console.log(place.geometry.location.lng());
             console.log(place.formated_address);
@@ -246,7 +258,7 @@ var searchButton = function () {
             };
             $.post('/cottageByLocation', formData).success(function (data, status, xhr) { //sends post to search
                 var tableHtml = '';
-                for (i = 0; i < data.length; i++) {
+                for (i = 0; i < data.length; i++) { //Populates search results table with results
                     tableHtml += '<tr><td><span class="label label-default">'
                     if (data[i].rating === -1) {
                         tableHtml += 'No Rating';
@@ -261,7 +273,7 @@ var searchButton = function () {
                 $('#searchResults').show();
 
             }).fail(function (data, status, xhr) {
-                $('#errorMessageSearch').text("Internal Server Error!"); //error message if user cannot be created
+                $('#errorMessageSearch').text("Internal Server Error!"); //error message if search cannot be made
             });
         } else {
             $("#errorMessageSearch").text("Please select a valid location!");
@@ -269,7 +281,7 @@ var searchButton = function () {
     }
 }
 
-var createButton = function () {
+var createButton = function () { //Event handling for Create listing button on create listing page
     $('#errorMessageCreateListing').text("");
     if (!$('#inputCottageName').val()) {
         $('#errorMessageCreateListing').text("Required fields missing!"); //give error message if fields are missing
@@ -291,7 +303,7 @@ var createButton = function () {
         $('#errorMessageCreateListing').text("Required fields missing!"); //give error message if fields are missing
         return;
     };
-    if (autocomplete) {
+    if (autocomplete) { //Gets place given by autocomplete
         if (autocomplete.getPlace()) {
             var place = autocomplete.getPlace();
             console.log(place.geometry.location.lat());
