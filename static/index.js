@@ -69,6 +69,8 @@ var getListingPage = function (listingName) {
         $('#editPrice').val(data.pricing);
         $('#editDescription').val(data.description);
         $('#editDatesAvailable').val(data.available);
+        $('#input-21a').attr("value", data.rating);
+        $('#input-21a').on('rating.change', function());
         $("#cottageListingPage").show();
         $("#searchResults").hide();
     });
@@ -76,6 +78,7 @@ var getListingPage = function (listingName) {
 
 var editListing = function () {
     $("#displayListing").hide();
+    $("#editLocation").val("");
     $("#editListing").show();
     var autoCompleteInput = document.getElementById('editLocation');
     var autoCompleteOptions = {
@@ -94,7 +97,7 @@ var saveListing = function () {
             console.log(place.geometry.location.lat());
             console.log(place.geometry.location.lng());
             var formData = {
-                name: $('#cottageName'),
+                name: $('#cottageName').text(),
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
                 location: place.formatted_address,
@@ -103,6 +106,7 @@ var saveListing = function () {
                 datesAvailable: $('#editDatesAvailable').val(),
                 description: $('#editDescription').val()
             };
+            console.log(formData);
             $("#errorEditListing").text("");
             $.post('/editListing', formData).success(function (data, status, xhr) { //sends post request to sing up
                 $('#editListing').hide();
@@ -189,7 +193,6 @@ var getUserPage = function (email) {
 }
 
 var getCurrentUserPage = function () {
-    console.log("getuser");
     var formData = {};
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         console.log(data);
