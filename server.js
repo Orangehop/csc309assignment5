@@ -450,6 +450,7 @@ app.post('/createListing', function(req, res) {
                 newCottage.rating = -1;
                 newCottage.ratingcount = 0;
                 newCottage.raters = [];
+                newCottage.comments = [];
                 newCottage.datesAvailable = req.body.datesAvailable;
                 newCottage.address = req.body.address;
                 newCottage.owner = req.user._id;
@@ -488,7 +489,7 @@ app.post('/comment', function(req, res) {
             console.error(err);
             return res.end();
         }
-        else if(cottage == null){
+        else if(!cottage){
             res.status(404);
             res.send({
                 "ErrorCode": "COTTAGE_NOT_FOUND"
