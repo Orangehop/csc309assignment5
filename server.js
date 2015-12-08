@@ -541,6 +541,13 @@ app.post('/getListing', function(req, res) {
                     console.error("COTTAGE_OWNER_DOES_NOT_EXIST");
                     return res.end();
                 }
+                var email;
+                if (user.local) {
+                    email = user.local.email;
+                }
+                else {
+                    email = user.facebook.email;
+                }
                 res.send({
                     username : user.name,
                     name: cottage.name,
@@ -549,7 +556,8 @@ app.post('/getListing', function(req, res) {
                     pricing: cottage.rentAmount,
                     description: cottage.description,
                     available: cottage.datesAvailable,
-                    comments: cottage.comments
+                    comments: cottage.comments,
+                    email: email
                 });
             });
         }
