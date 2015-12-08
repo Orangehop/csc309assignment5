@@ -70,7 +70,14 @@ var getListingPage = function (listingName) {
         $('#editDescription').val(data.description);
         $('#editDatesAvailable').val(data.available);
         $('#input-21a').attr("value", data.rating);
-        $('#input-21a').on('rating.change', function());
+        $('#input-21a').on('rating.change', function (event, value, caption) {
+            var formData = {
+                name: $('#cottageName').text(),
+                rating: value
+            };
+            $.post('/rate', formData).success(function (data, status, xhr) { //sends post request to sing up
+            });
+        });
         $("#cottageListingPage").show();
         $("#searchResults").hide();
     });
