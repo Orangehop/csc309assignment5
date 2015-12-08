@@ -500,7 +500,9 @@ app.post('/comment', function(req, res) {
             var comment = new Comment();
             comment.commentor = req.user;
             comment.comment = req.body.comment;
+            comment.save();
             cottage.comments.push(comment);
+            cottage.save();
         }
     });
 });
