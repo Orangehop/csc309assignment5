@@ -52,6 +52,8 @@ var userSchema = mongoose.Schema({
     description: String,
     location: String,
     phone: String,
+    email: String,
+    privelege: String,
     local: {
         email: String,
         password: String
@@ -147,8 +149,9 @@ passport.use(new FacebookStrategy({
                         User.find({}, function(err, users) {
                             if (err)
                                 return done(err);
+                            newUser.privelege = "";
                             if (!user) {
-                                newUser.privelege = admin;
+                                newUser.privelege = "admin";
                             }
                         });
                         newUser.facebook.id    = profile.id;
@@ -156,6 +159,7 @@ passport.use(new FacebookStrategy({
                         newUser.facebook.email = profile.emails[0].value;
                         newUser.facebook.name = profile.name.givenName + " " + profile.name.familyName;
                         newUser.name = newUser.facebook.name;
+                        newUser.email =  newUser.facebook.email;
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
@@ -203,6 +207,15 @@ passport.use('local-signup', new LocalStrategy({
                     var newUser = new User();
                     newUser.local.email = email;
                     newUser.local.password = newUser.generateHash(password);
+                    newUser.email =  newUser.local.email;
+                    User.find({}, function(err, users) {
+                        if (err)
+                            return done(err);
+                        newUser.privelege = "";
+                        if (!user) {
+                            newUser.privelege = "admin";
+                        }
+                    });
                     newUser.save(function(err) {
                         if (err)
                             throw err;
