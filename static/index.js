@@ -94,6 +94,7 @@ var saveListing = function () {
             console.log(place.geometry.location.lat());
             console.log(place.geometry.location.lng());
             var formData = {
+                name: $('#cottageName'),
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
                 location: place.formatted_address,
@@ -123,11 +124,12 @@ var editUserProfile = function () {
 
 var saveUserProfile = function () {
     var formData = {
-        location: $('#editLocation').val(),
+        location: $('#editUserLocation').val(),
         fullname: $('#editUserFullName').val(),
         phone: $('#editUserPhone').val(),
         description: $('#editUserDescription').val()
     };
+    console.log(formData);
     $("#errorEditProfile").text("");
     $.post('/editProfile', formData).success(function (data, status, xhr) { //sends post request to sing up
         $('#userProfileEdit').hide();
