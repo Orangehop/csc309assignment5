@@ -195,8 +195,8 @@ var getUserPage = function (email) {
     };
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         console.log(data);
-        $('#userEmail').text(data.local.email);
-        $('#editUserEmail').text(data.local.email);
+        $('#userEmail').text(data.email);
+        $('#editUserEmail').text(data.email);
         $('#userLocation').text(data.location);
         $('#userFullName').text(data.name);
         $('#userPhone').text(data.phone);
@@ -216,8 +216,8 @@ var getCurrentUserPage = function () {
     var formData = {};
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         console.log(data);
-        $('#userEmail').text(data.local.email);
-        $('#editUserEmail').text(data.local.email);
+        $('#userEmail').text(data.email);
+        $('#editUserEmail').text(data.email);
         $('#userLocation').text(data.location);
         $('#userFullName').text(data.name);
         $('#userPhone').text(data.phone);

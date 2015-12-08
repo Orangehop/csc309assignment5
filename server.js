@@ -144,6 +144,13 @@ passport.use(new FacebookStrategy({
                         return done(null, user);
                     } else {
                         var newUser = new User();
+                        User.find({}, function(err, users) {
+                            if (err)
+                                return done(err);
+                            if (!user) {
+                                newUser.privelege = admin;
+                            }
+                        });
                         newUser.facebook.id    = profile.id;
                         newUser.facebook.token = token;
                         newUser.facebook.email = profile.emails[0].value;
