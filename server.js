@@ -557,7 +557,8 @@ app.post('/getListing', function(req, res) {
                     description: cottage.description,
                     available: cottage.datesAvailable,
                     comments: cottage.comments,
-                    email: email
+                    email: email,
+                    rating: cottage.rating
                 });
             });
         }
