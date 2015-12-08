@@ -171,18 +171,18 @@ var getUserPage = function (email) {
     };
     $.post('/getUserByEmail', formData).success(function (data, status, xhr) { //sends post to search
         console.log(data);
-        $('#userEmail').text(data.username);
+        $('#userEmail').text(data.local.email);
+        $('#editUserEmail').text(data.local.email);
         $('#userLocation').text(data.location);
-        $('#userEmail').text(data.email);
+        $('#userFullName').text(data.name);
         $('#userPhone').text(data.phone);
         $('#userDescription').text(data.description);
-        $('#eName').val(data.username);
-        $('#eLocation').val(data.location);
-        $('#eEmail').val(data.email);
-        $('#ePhone').val(data.phone);
-        $('#eUserDescription').val(data.description);
-        $("#userProfile").show();
-        $("wrapper").not(":eq(#cottageListingPage)").hide();
+        $('#editUserFullName').val(data.name);
+        $('#editUserLocation').val(data.location);
+        $('#editUserPhone').val(data.phone);
+        $('#editUserDescription').val(data.description);
+        $("#userProfilePage").show();
+        $("#userProfilePage").siblings().hide();
     }).fail(function (data, status, xhr) {
         console.log(xhr);
     });
@@ -195,14 +195,14 @@ var getCurrentUserPage = function () {
         console.log(data);
         $('#userEmail').text(data.local.email);
         $('#editUserEmail').text(data.local.email);
-        $('#userLocation').text(data.local.location);
-        $('#userFullName').text(data.local.fullname);
-        $('#userPhone').text(data.local.phone);
-        $('#userDescription').text(data.local.description);
-        $('#editUserFullName').val(data.local.fullname);
-        $('#editLocation').val(data.local.location);
-        $('#editUserPhone').val(data.local.phone);
-        $('#editUserDescription').val(data.local.description);
+        $('#userLocation').text(data.location);
+        $('#userFullName').text(data.name);
+        $('#userPhone').text(data.phone);
+        $('#userDescription').text(data.description);
+        $('#editUserFullName').val(data.name);
+        $('#editUserLocation').val(data.location);
+        $('#editUserPhone').val(data.phone);
+        $('#editUserDescription').val(data.description);
         $("#userProfilePage").show();
         $("#userProfilePage").siblings().hide();
     });
@@ -294,17 +294,6 @@ var createButton = function () {
             $("#errorMessageCreateListing").text("Please select a valid location!");
         }
     }
-}
-
-var updateListing = function () {
-    var formData = {
-        address: $('#eAddress').val(),
-        location: $('#eLocation').val(),
-        address: $('#ePricing').val(),
-        description: $('#eDescription').val(),
-        datesAvailable: $('#eDatesAvailable').val(),
-        description: $('#editDescription').val()
-    };
 }
 
 var login = function () { //logs into application
