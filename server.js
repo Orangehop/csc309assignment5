@@ -601,7 +601,7 @@ app.post('/editListing', function(req, res) {
             console.error(err);
             return res.end();
         }
-        else if(cottage == null){
+        else if(!cottage){
             res.status(404);
             res.send({
                 "ErrorCode": "COTTAGE_NOT_FOUND"
@@ -625,23 +625,23 @@ app.post('/editListing', function(req, res) {
                 cottage.lat = req.body.lat;
                 cottage.lng = req.body.lng;
                 cottage.description = req.body.description;
+                cottage.save(function (err) {
+                    if (err) {
+                        res.status(500);
+                        res.send({
+                            "ErrorCode": "INTERNAL_SERVER_ERROR"
+                        });
+                        console.error(err);
+                        return res.end();
+                    }
+                    else{
+                        res.status(200);
+                        console.log("Listing added edited");
+                        return res.end();
+                    }
+                });
             }
         }
-        cottage.save(function (err) {
-            if (err) {
-                res.status(500);
-                res.send({
-                    "ErrorCode": "INTERNAL_SERVER_ERROR"
-                });
-                console.error(err);
-                return res.end();
-            }
-            else{
-                res.status(200);
-                console.log("Listing added edited");
-                return res.end();
-            }
-        });
     });
 });
 
