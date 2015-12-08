@@ -541,6 +541,13 @@ app.post('/getListing', function(req, res) {
                     console.error("COTTAGE_OWNER_DOES_NOT_EXIST");
                     return res.end();
                 }
+                var email;
+                if (user.local) {
+                    email = user.local.email;
+                }
+                else {
+                    email = user.facebook.email;
+                }
                 res.send({
                     username : user.name,
                     name: cottage.name,
@@ -549,7 +556,9 @@ app.post('/getListing', function(req, res) {
                     pricing: cottage.rentAmount,
                     description: cottage.description,
                     available: cottage.datesAvailable,
-                    comments: cottage.comments
+                    comments: cottage.comments,
+                    email: email,
+                    rating: cottage.rating
                 });
             });
         }
@@ -728,9 +737,9 @@ app.post("/rate", function(req,res) {
                 return res.end();
             }
             else {
-                if(!$.inArray(req.user._id, cottage.raters)) {
+                if(cottage.raters.indexOf(req.user._id) == -1) {
                     cottage.ratingcount++;
-                    cottage.rating = cottage.rating*(cottage.ratingcount-1/(cottage.ratingcount)) + req.body.rating/cottage.ratingCount;
+                    cottage.rating = cottage.rating*((cottage.ratingcount-1)/(cottage.ratingcount)) + parseInt(req.body.rating)/cottage.ratingcount;
                     cottage.raters.push(req.user._id);
                     cottage.save(function (err) {
                         if (err) {
@@ -743,7 +752,6 @@ app.post("/rate", function(req,res) {
                         }
                         else{
                             res.status(200);
-                            console.log("Listing added edited");
                             return res.end();
                         }
                     });
