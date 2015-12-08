@@ -51,6 +51,7 @@ var userSchema = mongoose.Schema({
     name: String,
     description: String,
     location: String,
+    phone: String,
     local: {
         email: String,
         password: String
@@ -582,9 +583,10 @@ app.post('/editProfile', function(req, res) {
         console.error("NOT_LOGGED_IN");
     }
     else {
-        req.user.name = req.body.name;
+        req.user.name = req.body.fullname;
         req.user.description = req.body.description;
         req.user.location = req.body.location;
+        req.user.phone = req.body.phone;
         req.user.save();
         res.status(200);
         return res.end();
