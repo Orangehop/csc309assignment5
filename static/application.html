@@ -112,14 +112,13 @@
                             </div>
 
                             <p>Insert a comment below
-                                <button type="button" id='submit' class="btn btn-success">Submit Comment</button>
+                                <button type="button" onclick='submitComment' class="btn btn-success">Submit Comment</button>
                             </p>
                             <textarea class="form-control" rows="3" id="commentInput"></textarea>
                             <table class="table table-condensed">
                                 <thead>
                                     <th style='text-align: center'>User</th>
                                     <th style='text-align: center'>Comment</th>
-                                    <th style='text-align: center'>Submitted on</th>
                                 </thead>
                                 <tbody id="userComments">
                                 </tbody>
@@ -212,9 +211,9 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Rating</th>
-                                            <th>Name</th>
-                                            <th>Location</th>
+                                            <th style='text-align: center'>Rating</th>
+                                            <th style='text-align: center'>Name</th>
+                                            <th style='text-align: center'>Location</th>
                                         </tr>
                                     </thead>
                                     <tbody id="listingResults">
