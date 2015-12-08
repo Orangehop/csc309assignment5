@@ -503,6 +503,9 @@ app.post('/comment', function(req, res) {
             comment.save();
             cottage.comments.push(comment);
             cottage.save();
+            res.status(200);
+            res.send();
+            return res.end();
         }
     });
 });
