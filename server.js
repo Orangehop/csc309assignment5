@@ -84,6 +84,8 @@ var cottageSchema = mongoose.Schema({
     location: String,
     address: String,
     rating: Number,
+    ratingcount: Number,
+    raters: [ObjectId],
     datesAvailable: String,
     owner: ObjectId,
     description: String,
@@ -433,6 +435,8 @@ app.post('/createListing', function(req, res) {
                 newCottage.name = req.body.name;
                 newCottage.location = req.body.location;
                 newCottage.rating = -1;
+                newCottage.ratingcount = 0;
+                newCottage.raters = [];
                 newCottage.datesAvailable = req.body.datesAvailable;
                 newCottage.address = req.body.address;
                 newCottage.owner = req.user._id;
@@ -581,6 +585,7 @@ app.post('/editProfile', function(req, res) {
         req.user.name = req.body.name;
         req.user.description = req.body.description;
         req.user.location = req.body.location;
+        req.user.save();
         res.status(200);
         return res.end();
     }
@@ -620,6 +625,100 @@ app.post('/editListing', function(req, res) {
                 cottage.lat = req.body.lat;
                 cottage.lng = req.body.lng;
                 cottage.description = req.body.description;
+            }
+        }
+        cottage.save(function (err) {
+            if (err) {
+                res.status(500);
+                res.send({
+                    "ErrorCode": "INTERNAL_SERVER_ERROR"
+                });
+                console.error(err);
+                return res.end();
+            }
+            else{
+                res.status(200);
+                console.log("Listing added edited");
+                return res.end();
+            }
+        });
+    });
+});
+
+app.post("/getCottagesByUser", function(req,res) {
+    User.findOne({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
+        if (err){
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_ERROR"
+            });
+            console.error("INTERNAL_ERROR");
+            return done(err);
+        }
+
+        if (!user) {
+            res.status(404);
+            res.send({
+                "ErrorCode": "USER_NOT_FOUND"
+            });
+            console.error("USER_NOT_FOUND");
+            return res.end();
+        } else {
+            Cottage.find({"owner": user._id}, function(err, cottages) {
+                if (err) {
+                    res.status(500);
+                    res.send({
+                        "ErrorCode": "INTERNAL_SERVER_ERROR"
+                    });
+                    console.error(err);
+                    return res.end();
+                }
+                if (!cottages) {
+                    res.status(404);
+                    res.send({
+                        "ErrorCode": "NO COTTAGES IN RANGE"
+                    })
+                    res.send(null);
+                }
+                cottages.sort(compareRating);
+                res.send(cottages);           
+            });
+        }
+    });
+})
+
+app.post("/rate", function(req,res) {
+    Cottage.findOne({name : req.body.name}, function(err, cottage){
+        if(err){
+            res.status(500);
+            res.send({
+                "ErrorCode": "INTERNAL_SERVER_ERROR"
+            });
+            console.error(err);
+            return res.end();
+        }
+        else if(cottage == null){
+            res.status(404);
+            res.send({
+                "ErrorCode": "COTTAGE_NOT_FOUND"
+            });
+            console.error("COTTAGE_NOT_FOUND");
+        }
+        else{
+            if (!req.user) {
+                res.status(400);
+                res.send({
+                    "ErrorCode": "NOT_LOGGED_IN"
+                });
+                console.error("NOT_LOGGED_IN");
+                return res.end();
+            }
+            else {
+                if(!$.inArray(req.user._id, cottage.raters)) {
+                    cottage.ratingcount++;
+                    cottage.rating = cottage.rating*(cottage.ratingcount-1/(cottage.ratingcount)) + req.body.rating/cottage.ratingCount;
+                    cottage.raters.push(req.user._id);
+                }
             }
         }
         cottage.save(function (err) {
