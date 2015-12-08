@@ -150,7 +150,7 @@ var showNavigationPage = function () {
 }
 
 var getCurrentUserListings = function () {
-    $.get('/cottageByUser').success(function (data, status, xhr) { //sends post to search
+    $.post('/cottageByUser').success(function (data, status, xhr) { //sends post to search
         var tableHtml = '';
         for (i = 0; i < data.length; i++) {
             tableHtml += '<tr><td><span class="label label-default">'

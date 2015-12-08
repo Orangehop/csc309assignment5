@@ -280,7 +280,19 @@ app.get('/users', function(req, res) {
     });
 });
 
-app.get('/cottages', function(req, res) {
+app.get("/", function(req,res) {
+    console.log("did it do it?");
+    if(req.user) {
+        res.redirect("/");
+    }
+    else {
+        res.sendFile("/static/index.html");
+        return res.end();
+    }
+    
+});
+
+app.post('/cottages', function(req, res) {
     Cottage.find({}, function(err, cottages) {
         if (err) {
             res.status(500);
@@ -317,7 +329,7 @@ app.post('/cottageByLocation', function(req, res) {
     });
 });
 
-app.get('/cottageByRating', function(req, res) {
+app.post('/cottageByRating', function(req, res) {
     Cottage.find({'rating' : {$gte: req.body.rating}}, function(err, cottages) {
         if (err) {
             res.status(500);
@@ -647,7 +659,7 @@ app.post('/editListing', function(req, res) {
     });
 });
 
-app.post("/getCottagesByUser", function(req,res) {
+app.post("/cottageByUser", function(req,res) {
     User.findOne({$or:[ { 'local.email' :  req.body.email }, { 'facebook.email' :  req.body.email } ]}, function(err, user) {
         if (err){
             res.status(500);
@@ -720,31 +732,39 @@ app.post("/rate", function(req,res) {
                     cottage.ratingcount++;
                     cottage.rating = cottage.rating*(cottage.ratingcount-1/(cottage.ratingcount)) + req.body.rating/cottage.ratingCount;
                     cottage.raters.push(req.user._id);
+                    cottage.save(function (err) {
+                        if (err) {
+                            res.status(500);
+                            res.send({
+                                "ErrorCode": "INTERNAL_SERVER_ERROR"
+                            });
+                            console.error(err);
+                            return res.end();
+                        }
+                        else{
+                            res.status(200);
+                            console.log("Listing added edited");
+                            return res.end();
+                        }
+                    });
                 }
             }
         }
-        cottage.save(function (err) {
-            if (err) {
-                res.status(500);
-                res.send({
-                    "ErrorCode": "INTERNAL_SERVER_ERROR"
-                });
-                console.error(err);
-                return res.end();
-            }
-            else{
-                res.status(200);
-                console.log("Listing added edited");
-                return res.end();
-            }
-        });
     });
 });
 
 app.get("/success", function(req,res) {
     res.status(200);
-    res.redirect("/application.html");
+    res.redirect("/application");
     res.send();
+});
+
+app.get("/application", function(req,res) {
+    if(req.user){
+        res.redirect("/application.html");
+        return res.end();
+    }
+    else res.redirect("/");
 });
 
 app.get("/failure", function(req,res) {
