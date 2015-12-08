@@ -53,13 +53,13 @@ var getListingPage = function (listingName) {
     $.post('/getListing', formData).success(function (data, status, xhr) { //sends post to search
         var commentTable = '';
         for (i = 0; i < data.comments.length; i++) {
-            tableHtml += '<tr><td><a href="javascript:getListingPage(\'' + data.comments[i].userId + '\');">' + data.comments[i].username + '</a></td><td>' + data.comments[i].comment + '</td><td>' + data.comments[i].submitTime + '</td></tr>';
+            tableHtml += '<tr><td><a href="javascript:getListingPage(\'' + data.comments[i].email + '\');">' + data.comments[i].email + '</a></td><td>' + data.comments[i].comment + '</td></tr>';
         };
         console.log(data);
         $('#userComments').html(commentTable);
         $('#cottageName').text(data.name);
         $('#editCottageName').text(data.name);
-        $('#listingUser').text(data.username);
+        $('#listingUser').html('<a href="javascript:getUserPage(\'' + data.email + '\');">' + data.username + '</a>');
         $('#listingAddress').text(data.address);
         $('#listingLocation').text(data.location);
         $('#listingPricing').text(data.pricing);
@@ -75,11 +75,23 @@ var getListingPage = function (listingName) {
                 name: $('#cottageName').text(),
                 rating: value
             };
+            console.log(value);
             $.post('/rate', formData).success(function (data, status, xhr) { //sends post request to sing up
             });
         });
         $("#cottageListingPage").show();
         $("#searchResults").hide();
+    });
+}
+
+var submitComment = function () {
+    var formData = {
+        name: $('#cottageName').text(),
+        comment: $('#commentInput').val()
+    };
+    $.post('/comment', formData).success(function (data, status, xhr) { //sends post request to sing up
+        $('#commentInput').val("");
+        getListingPage($('#cottageName').text());
     });
 }
 
